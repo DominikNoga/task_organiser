@@ -1,0 +1,59 @@
+body{
+    margin: 0;
+    padding: 0;
+    background-image: url("/static/img/bc1.jpg");
+    background-size: 100vw 100vh;
+    background-repeat: no-repeat;
+}
+a{
+    text-decoration:none;
+    color:inherit;
+}
+.container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100vw;
+    height: 100vh;
+}
+.form{
+    display: flex;
+    justify-content: center;
+    flex-direction:column;
+    background-color: rgba(255, 255, 255, 0.427);
+    z-index: 100;
+    padding: 2em;
+    border-radius: 1em;
+    gap:2em;
+}
+.inputFields{
+    min-width: 80%;
+}
+.input-reg{
+    display: block;
+    min-height: 2em;
+    min-width: 20em;
+    margin-bottom: 3em;
+    border: solid black 1px;
+    border-radius: 1em;
+}
+.reg-btn{
+    margin: auto;
+    display: block;
+    min-width: 7em;
+    min-height: 2em;
+    background-color: rgb(22, 39, 90);
+    color:white;
+    font-size: 1.2em;
+    font-weight: bold;
+    border: solid black 1px;
+    border-radius: 1em;
+}
+.loginLink{
+    display: block;
+    margin:auto;
+}
+button:hover{
+    cursor: pointer;
+    opacity: 0.9;
+}

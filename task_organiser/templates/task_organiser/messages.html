@@ -1,0 +1,44 @@
+{% extends 'task_organiser/main_template.html' %}
+{%load static %}
+{% block head %}
+    <link rel="stylesheet" href="{% static 'css/mess.css'%}">
+{% endblock %}
+{% block content %}
+<div class="mainPanelCal">
+    <h3 class="plan-title-cal">
+        All of Your tasks sorted by deadline and highlighted 
+        depending of chosen importancy
+    </h3>
+    <div id="legend">
+        <div class="small-box" 
+        style="background-color:rgba(255, 0, 0, 0.785);">
+        </div> <div class="legend-p">High importancy</div>
+        
+        <div class="small-box"
+        style="background-color:rgba(229, 255, 0, 0.785);">
+        </div> <div>Medium importancy</div>
+        
+        <div class="small-box"  
+        style="background-color:rgba(0, 255, 21, 0.785);">
+        </div> <div>Low importancy</div>
+    </div>
+    <div class="buttons">
+        <button class="change-number" style="float:left;">-</button>
+        <button class="change-number" style="float: right;">+</button>
+    </div>
+    <div class="rowContainer">
+        <div class="row">
+            <div class="number">2</div>
+        </div>
+        <div class="row">
+            <div class="number">3</div>
+        </div>
+        <div class="row">
+            <div class="number">4</div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block script %}
+    <script src="{% static 'js/mess.js' %}"></script>
+{% endblock %}

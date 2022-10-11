@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="{% static 'css/login.css' %}">
+
+</head>
+<body>
+    <div class="container">
+        <div class="form">
+            <form action="" method="post" class="reg-form">
+                {% csrf_token %}
+                <input class="input-reg" type="text" name="username" id="username" placeholder="Enter username">
+                
+                <input class="input-reg" type="password" name="password" id="password" placeholder="Enter password">
+                
+                <button type="submit" class="reg-btn">Sign in</button>
+            </form>
+            <a href="{% url 'register' %}" class="loginLink">If You don't have account sign up</a>
+        </div>
+    </div>
+    <!-- <script src="{% static 'js/animation.js' %}"></script> -->
+</body>
+</html>

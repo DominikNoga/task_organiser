@@ -1,0 +1,46 @@
+{% extends 'task_organiser/main_template.html' %}
+{% load static %}
+{% block content %}
+    <br>
+    <div class="mainPanelCal">
+        <h3 class="plan-title-cal">
+            All of Your tasks sorted by deadline and highlighted 
+            depending of chosen importancy
+        </h3>
+        <div id="legend">
+            <div class="small-box" 
+            style="background-color:rgba(255, 0, 0, 0.785);">
+            </div> <div class="legend-p">High importancy</div>
+            
+            <div class="small-box"
+            style="background-color:rgba(229, 255, 0, 0.785);">
+            </div> <div>Medium importancy</div>
+            
+            <div class="small-box"  
+            style="background-color:rgba(0, 255, 21, 0.785);">
+            </div> <div>Low importancy</div>
+        </div>
+        <div class="rowContainer">
+            <div class="buttons">
+                <button class="slider-btn" style="float:left;">-</button>
+                <button class="slider-btn" style="float: right;">+</button>
+            </div>
+            <div class="row">
+                <div class="date-link"></div>
+            </div>
+            <div class="row">
+                <div class="date-link"></div>
+            </div>
+            <div class="row">
+                <div class="date-link"></div>
+            </div>
+        </div>  
+    </div>
+    <div class="planCal" id="planCal">
+        {% include 'task_organiser/tasks.html' %}
+    </div>
+{% endblock %}
+{% block script %}
+    <script type="module" src="{% static 'js/calendar.js' %}"></script>
+{% endblock %}
+

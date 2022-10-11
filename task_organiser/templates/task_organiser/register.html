@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Register</title>
+        <link rel="stylesheet" href="{% static 'css/login.css' %}">
+    </head>
+    <body>
+        <div class="container">
+            <div class="form">
+                <form action="" method="post" class="reg-form">
+                    {% csrf_token %}
+                    <div class="inputFields">
+                        {{form.username}}
+                    </div>
+                    <div class="inputFields">
+                        {{form.email}}
+                    </div>
+                    <div class="inputFields">
+                        {{form.password1}}
+                    </div>
+                    <div class="inputFields">
+                        {{form.password2}}
+                    </div>
+                    <button type="submit" class="reg-btn">Sign up</button>
+                </form>
+                <a href="{% url 'login' %}" class="loginLink">If You already have an account sign in</a>
+            </div>
+        </div>
+        <script src="{% static 'js/addClass.js' %}"></script>
+        <!-- <script src="{% static 'js/animation.js' %}"></script> -->
+    </body>
+</html>
