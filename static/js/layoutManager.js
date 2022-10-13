@@ -35,8 +35,8 @@ export default class LayoutManager {
         this.buttons[this.PREV].addEventListener("click", () =>{
             this.updateRows(-1)
         });
-        this.cancelBtn.addEventListener("click", () =>{
-            this.deleteFlag = 0;
+        this.buttons[this.NEXT].addEventListener("click", () =>{
+            this.updateRows(1)
         });
         this.dm.updateDateSlider();
     }
