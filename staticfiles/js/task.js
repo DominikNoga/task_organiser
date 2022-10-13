@@ -25,6 +25,8 @@ export default class Task{
     <p>Status: ${this.status}</p>
     <p>Importancy: ${this.importancy}</p>
     <p>Users: ${this.users}</p>
+    <label for="finish">Mark as finished</label>
+    <input type="checkbox" name="finish" id="finish"/>
 </div>`
     }
 
