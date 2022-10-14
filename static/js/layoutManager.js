@@ -18,7 +18,7 @@ export default class LayoutManager {
         this.popup = document.getElementsByClassName('popupMessage')[0];
         this.subBtn = document.getElementById("popupSubmit")
         this.cancelBtn = document.getElementById("popupCancel")
-        this.deleteFlag = -1;
+        this.deleteLink = document.querySelector('.popupMessage a');
     }
     updateRows = (value) =>{
         this.dm.updateDates(value)
@@ -49,54 +49,32 @@ export default class LayoutManager {
 
     }
     deleteTask = (id) => {
-        console.log("delete task on")
-        return new Promise((resolve) => {
-            if(this.deleteFlag ===1){
-                let toDelete;
-                this.tasks.forEach((task) => {
-                    if (task.id === id) {
-                        toDelete = task;
-                        task.toBeDeleted = true;
-                    }
-                })
-                this.tasks.sort((a, b) => Number(a.toBeDeleted) - Number(b.toBeDeleted));
-                this.tasks.pop();
-                const row = this.rows.filter(row => {
-                    return Number(this.dm.cutTime(toDelete.deadline)) === Number(this.dm.cutTime(row.date))
-                })[0];
-                row.removeTask(this.rowDivs[row.index], id);
-                resolve();
-            }
-        });
+        return new Promise((resolve) =>{
+            const task = this.tasks.find(t => t.id === id);
+            id = Number(task.db_id)
+            window.location.href = "\\home";
+        })
     }
     updateButtons = () =>{
         this.taskBtns = document.getElementsByClassName('btn-task'); 
         for(let btn of this.taskBtns){
-            btn.addEventListener('click', async () => {
+            btn.addEventListener('click', () => {
                 let id = Number(btn.id.slice(8));
                 this.popup.style.display = 'block';
-                try{
-                    await this.waitForPopup();
-                    await this.deleteTask(id)
-                }
-                catch(e){
-                    console.log(e);
-                }
+                this.waitForPopup(id);
+               
             });
         }
     }
-    waitForPopup = () =>{
-        return new Promise((resolve, reject) =>{
-            this.subBtn.addEventListener('click', () =>{
-                this.popup.style.display = 'none';
-                this.deleteFlag = 1;
-                resolve();
-            })
-            this.cancelBtn.addEventListener('click', () =>{
-                this.popup.style.display = 'none';
-                this.deleteFlag = 0;
-                reject("task not deleted");
-            })
-        });
+    waitForPopup = (id) =>{
+        const task = this.tasks.find(t => t.id === id);
+        id = Number(task.db_id)
+        this.deleteLink.href = `\\delete_task\\${id}`;
+        this.subBtn.addEventListener('click', () =>{
+            this.popup.style.display = 'none';
+        })
+        this.cancelBtn.addEventListener('click', () =>{
+            this.popup.style.display = 'none';
+        })
     }
 }   

@@ -91,9 +91,13 @@ a{
     background-color: rgb(255 255 255 / 60%);
     padding:1.5em 1em;
     text-align: center;
+    display: block;
 }
 .task{
     display: none; 
+}
+.task2:hover{
+    cursor: pointer;
 }
 .addTask{
     background-color: rgba(255, 255, 255, 0.427);
@@ -252,7 +256,7 @@ button:hover{
     display: flex;
     flex-direction: column;
     gap:1em;
-    min-height: 100px;
+    min-height: 20em;
     border:white 2px solid;
 }
 .popupMessage{
@@ -271,10 +275,10 @@ button:hover{
 .big{
     grid-column: 1/4;
 }
-.btn-task{
+.btn-task, .editTaskLink{
     position: relative;
     top:-2em;
-    left:100%;
+    left:calc(100% - 1.5em);
     background-color:rgb(0 0 0);
     color:white;
     border-radius: 50%;
@@ -286,4 +290,15 @@ button:hover{
     display:flex;
     justify-content:center;
     align-items:center;
+    font-size: 0.8em;
+}
+.editTaskLink{
+    top:-2em;
+    left:-1.5em;
+}
+#editTaskForm{
+    width: 20%;
+    margin:auto;
+    margin-top: 2em;
+    text-align: center;
 }

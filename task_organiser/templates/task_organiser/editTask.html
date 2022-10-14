@@ -1,0 +1,14 @@
+{% extends 'task_organiser/main_template.html' %}
+{% load static %}
+{% block content %}
+    <div class="addTask" id="editTaskForm">
+        <h3>Edit this task</h3>
+        <br>
+        {% include 'task_organiser/taskForm.html' %}
+    </div>
+    
+{% endblock %}
+
+{% block script %}
+<script src="{% static 'js/addClassesHome.js' %}"></script>
+{% endblock %}

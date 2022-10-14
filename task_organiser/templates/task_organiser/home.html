@@ -14,7 +14,7 @@
         <div class="plan" id="plan">
             
             {% for task in tasks %}
-                <div class="task">
+                <div class="task2">
                     <h4 style="text-decoration:underline">
                         {{task.name}}
                     </h4>
@@ -43,28 +43,7 @@
         <div class="addTask" id="addTask">
             <h3>Add new task to Your schedule</h3>
             <br>
-            <form action="" method="post" id="task-form">
-                {% csrf_token %}
-                
-                {% for field in form %}
-                    {% if field.label != "Importancy" %}
-                        <p class="form-par">
-                            <label>{{ field.label }}</label> {{ field }}
-                        </p>
-                    {% else %}
-                        <div class="form-par">
-                            <label>{{ field.label }} </label>
-                            <div class="taskInputField">
-                                {{ field }} <div class="rangeValue">1</div>
-                            </div>
-                        </div>
-                    {% endif %}
-                {% endfor %}
-                <p>
-                    <button type="submit" class="btn-submit">submit</button>
-                    <button type="reset" class="btn-cancel">reset</button>
-                </p>
-            </form>
+            {% include 'task_organiser/taskForm.html' %}
         </div>
 
     </div>

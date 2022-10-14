@@ -8,7 +8,6 @@ class Task(models.Model):
     status_choices = [
         ("to do", "to do"),
         ("in progress", "in progress"),
-        ("completed", "completed"),
     ]
     name = models.CharField(max_length=100, null=True)
     description = models.CharField(max_length=1000, null=True, blank=True, default=" ")

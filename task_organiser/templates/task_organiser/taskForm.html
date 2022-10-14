@@ -1,0 +1,22 @@
+<form action="" method="post" id="task-form">
+    {% csrf_token %}
+    
+    {% for field in form %}
+        {% if field.label != "Importancy" %}
+            <p class="form-par">
+                <label>{{ field.label }}</label> {{ field }}
+            </p>
+        {% else %}
+            <div class="form-par">
+                <label>{{ field.label }} </label>
+                <div class="taskInputField">
+                    {{ field }} <div class="rangeValue">{{ importancy }}</div>
+                </div>
+            </div>
+        {% endif %}
+    {% endfor %}
+    <p>
+        <button type="submit" class="btn-submit">submit</button>
+        <button href="{% url 'calendar' %}" type="reset" class="btn-cancel">cancel</button>
+    </p>
+</form>

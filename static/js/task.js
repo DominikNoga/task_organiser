@@ -1,7 +1,7 @@
 import DateManager from './dateManager.js'
 export default class Task{
     constructor(name, description, status,
-        deadline, date, importancy, users, id){
+        deadline, date, importancy, users, id, db_id){
         this.deadline = deadline;
         this.dm = new DateManager();
         this.importancy = importancy;
@@ -13,11 +13,13 @@ export default class Task{
         this.class = this.importancy > 3 ? (this.importancy > 6 ? "high" : "medium" ) : "low"
         this.toBeDeleted = false;
         this.id = id;
+        this.db_id  = Number(db_id);
     }
 
     createDiv = () =>{
         return `<div class="task2 ${this.class}" id="task${this.id}">
-    <button class="btn-task" id="btn-task${this.id}">X</button>
+    <a href="\\edit_task\\${this.db_id}" class="editTaskLink" title="edit task"><i class="fa fa-edit"></i></a>
+    <button class="btn-task" id="btn-task${this.id}" title="delete task"><i class="fa fa-trash"></i></button>
     <h4>
         Task: ${this.name}
     </h4>

@@ -14,6 +14,7 @@ export default class TaskManager{
         const statuses = document.getElementsByClassName('status');
         const importancies = document.getElementsByClassName('importancy');
         const users = document.getElementsByClassName('users');
+        const ids = document.getElementsByClassName('id');
         let i;
         for(i=0; i<taskDivs.length; i++) {
             tasks.push(new Task(names[i].innerText, descriptions[i].innerText,
@@ -22,7 +23,7 @@ export default class TaskManager{
                 this.dm.stringToDate(dates[i].innerText), 
                 importancies[i].innerText,
                 users[i].innerText.split(','),
-                i
+                i, ids[i].innerText
             ));  
         }
         return tasks; 

@@ -1,3 +1,4 @@
+from multiprocessing import context
 from django.shortcuts import render, redirect
 from .forms import *
 from .models import *
@@ -8,6 +9,7 @@ from django.core import serializers
 
 def home(request):
     taskForm = addTaskForm()
+    importancy = 1
     if request.method == "POST":
         form = addTaskForm(request.POST)
         if form.is_valid():
@@ -15,7 +17,7 @@ def home(request):
             return redirect("home_redirect")
     current_user = request.user
     tasks = current_user.task_set.filter(deadline__contains=date.today()).order_by("deadline")
-    context = {"user": current_user, "tasks": tasks, "form":taskForm}
+    context = {"user": current_user, "tasks": tasks, "form":taskForm, "importancy": importancy}
     return render(request, "task_organiser/home.html", context)
 
 
@@ -57,3 +59,22 @@ def register_page(request):
 def messages(request):
     context = {}
     return render(request, "task_organiser/messages.html", context)
+
+
+def delete_task(request, task_id):
+    task = Task.objects.get(id=task_id)
+    task.delete()
+    return redirect("calendar")
+
+
+def edit_task(request, task_id):
+    task = Task.objects.get(id=task_id)
+    importancy = task.importancy
+    form = addTaskForm(instance=task)
+    if request.method == 'POST':
+        form = addTaskForm(request.POST ,instance=task)
+        form.save()
+        return redirect("calendar")
+
+    context = {'task': task, "form": form, "importancy": importancy}
+    return render(request, 'task_organiser/editTask.html', context)
