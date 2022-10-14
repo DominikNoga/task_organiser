@@ -15,7 +15,7 @@ class Task(models.Model):
     deadline = models.DateTimeField(null=True)
     date_added = models.DateTimeField(null=True, auto_now_add=True)
     importancy = models.IntegerField(null=True, default=1)
-    users = models.ManyToManyField(User, null=True)
+    users = models.ManyToManyField(User)
     class Meta:
         constraints = [
             models.CheckConstraint(
@@ -25,3 +25,13 @@ class Task(models.Model):
         ]
     def __str__(self):
         return self.name
+
+
+class AppUser(models.Model):
+    username = models.CharField(max_length=100, null=True)
+    user = models.OneToOneField(User, on_delete=models.CASCADE,
+        primary_key=True)
+
+    friends = models.ManyToManyField("self", blank=True)
+    def __str__(self):
+        return self.username

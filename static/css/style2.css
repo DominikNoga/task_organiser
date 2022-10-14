@@ -12,21 +12,25 @@ a{
     text-decoration: none;
 }
 /* navigation */
-#navbar{
+nav{
     background-color: rgb(36,32,33);
     width: 100%;
     display: flex;
     flex-direction: row;
-    align-items: stretch;
-    gap:1em;
+    justify-content: space-between;
     font-size:1.2em ;
     height: 2.5em;
     color:white;
     font-weight: bold;
     padding: 0.4em 0em;
 }
-.menu_item{
+nav div{
+    height:inherit;
+}
+.menu_item, .menu_item_side{
     display: flex;
+    float:left;
+    margin-left:1em;
     justify-content: center;
     align-items: center;
 }
@@ -35,13 +39,9 @@ a{
     cursor: pointer;
     background-color: rgb(55, 48, 50);
 }
-.menu_item:last-child{
-    margin: auto;
-}
-.menu_item:last-child:hover{
+.menu_item_side:hover{
     opacity: 0.8;
     cursor: pointer;
-    background-color: rgb(36,32,33);
 }
 .menu_link{
     display: block;

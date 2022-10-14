@@ -1,15 +1,23 @@
 {% load static %}
 <nav id="navbar">
-    <div class="menu_item" style="margin-left:0.5em;">
-        <a href="{% url 'home' %}" class="menu_link">Home</a>
+    <div>
+        <div class="menu_item" style="margin-left:0.5em;">
+            <a href="{% url 'home' %}" class="menu_link">Home</a>
+        </div>
+        <div class="menu_item">
+            <a href="{% url 'calendar' %}" class="menu_link">Calendar</a>
+        </div>
+        <div class="menu_item">
+            <a href="{% url 'messages' %}" class="menu_link">Messages</a>
+        </div>
     </div>
-    <div class="menu_item">
-        <a href="{% url 'calendar' %}" class="menu_link">Calendar</a>
+    <div>
+        <div class="menu_item_side">
+            <a href="{% url 'logout' %}" class="menu_link" title="logout"><i class="fa fa-right-from-bracket"></i></a>
+        </div>
+        <div class="menu_item_side" style="margin-right: 1em;">
+            <a href="{% url 'login' %}" class="menu_link"><i class="fa fa-user" aria-hidden="true"></i></a>
+        </div>
     </div>
-    <div class="menu_item">
-        <a href="{% url 'messages' %}" class="menu_link">Messages</a>
-    </div>
-    <div class="menu_item" style="margin-right: 1em;">
-        <a href="{% url 'login' %}" class="menu_link"><i class="fa fa-user" aria-hidden="true"></i></a>
-    </div>
+
 </nav>

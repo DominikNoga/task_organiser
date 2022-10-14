@@ -1,12 +1,12 @@
-from multiprocessing import context
 from django.shortcuts import render, redirect
 from .forms import *
 from .models import *
 from django.contrib.auth import authenticate, login, logout
 from datetime import date
-from django.core import serializers
+from django.contrib.auth.decorators import login_required
 
 
+@login_required(login_url='login')
 def home(request):
     taskForm = addTaskForm()
     importancy = 1
@@ -21,6 +21,7 @@ def home(request):
     return render(request, "task_organiser/home.html", context)
 
 
+@login_required(login_url='login')
 def calendar(request):
     current_user = request.user
     tasks = current_user.task_set.all().order_by("deadline")
@@ -44,6 +45,11 @@ def login_page(request):
     return render(request, "task_organiser/login.html", context)
 
 
+def logout_page(request):
+    logout(request)
+    return redirect('login')
+
+
 def register_page(request):
     form = CreateUserForm()
     if request.method == "POST":
@@ -56,17 +62,20 @@ def register_page(request):
     return render(request, "task_organiser/register.html", context)
 
 
+@login_required(login_url='login')
 def messages(request):
     context = {}
     return render(request, "task_organiser/messages.html", context)
 
 
+@login_required(login_url='login')
 def delete_task(request, task_id):
     task = Task.objects.get(id=task_id)
     task.delete()
     return redirect("calendar")
 
 
+@login_required(login_url='login')
 def edit_task(request, task_id):
     task = Task.objects.get(id=task_id)
     importancy = task.importancy
