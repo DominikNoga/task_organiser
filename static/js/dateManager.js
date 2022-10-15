@@ -33,9 +33,9 @@ export default class DateManager{
         + ":" + date.getMinutes().toString().padStart(2, "0");
     }
     stringToDate = (dateString) => {
-        return(new Date(
-            (Number(dateString) - 7200)*1000
-        ))
+        const date = new Date(dateString);
+        date.setHours(date.getHours() - 2);
+        return date;
     }
     cutTime = (date) =>{
         return new Date(date.getFullYear(), 

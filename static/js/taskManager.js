@@ -4,29 +4,32 @@ export default class TaskManager{
     constructor(){
         this.dm = new DateManager();
     }
-    createTaskArray = () =>{
-        let tasks = [];
-        const taskDivs = document.getElementsByClassName('task')
-        const names = document.getElementsByClassName('name');
-        const descriptions = document.getElementsByClassName('description');
-        const deadlines = document.getElementsByClassName('deadline');  
-        const dates = document.getElementsByClassName('date');
-        const statuses = document.getElementsByClassName('status');
-        const importancies = document.getElementsByClassName('importancy');
-        const users = document.getElementsByClassName('users');
-        const ids = document.getElementsByClassName('id');
-        let i;
-        for(i=0; i<taskDivs.length; i++) {
-            tasks.push(new Task(names[i].innerText, descriptions[i].innerText,
-                statuses[i].innerText, 
-                this.dm.stringToDate(deadlines[i].innerText), 
-                this.dm.stringToDate(dates[i].innerText), 
-                importancies[i].innerText,
-                users[i].innerText.split(','),
-                i, ids[i].innerText
-            ));  
-        }
-        return tasks; 
+    createTaskArray = async () => {
+        let taskArr = [];
+        const tasks_api = await fetch("http://127.0.0.1:8000/task_api/task_list/")        
+        const tasks_json = await tasks_api.json()
+        const tasks = await tasks_json;
+        const users_api = await fetch("http://127.0.0.1:8000/task_api/users_list/")
+        const users_json = await users_api.json()
+        const users = await users_json;
+        tasks.forEach((task, i) => {
+            let userArray = [];
+            const userIndexes = task.users;
+            const usernames = users.map((user) => {
+                for(let id of userIndexes){
+                    if(user.id === id)
+                        return user.username
+                }
+            }).join(" ");
+            taskArr.push(new Task(
+                task.name, task.description, task.status,
+                this.dm.stringToDate(task.deadline),
+                this.dm.stringToDate(task.date_added),
+                task.importancy,
+                usernames, i,
+                task.id
+            ))
+        })
+        return taskArr;
     }
-
 }

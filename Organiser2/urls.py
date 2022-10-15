@@ -7,6 +7,7 @@ from django.conf import settings
 urlpatterns = [
     path( 'admin/', admin.site.urls),
     path( '', include("task_organiser.urls")),
+    path('task_api/', include('task_api.urls'))
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

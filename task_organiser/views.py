@@ -69,13 +69,6 @@ def messages(request):
 
 
 @login_required(login_url='login')
-def delete_task(request, task_id):
-    task = Task.objects.get(id=task_id)
-    task.delete()
-    return redirect("calendar")
-
-
-@login_required(login_url='login')
 def edit_task(request, task_id):
     task = Task.objects.get(id=task_id)
     importancy = task.importancy
