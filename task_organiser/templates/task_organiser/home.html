@@ -8,28 +8,30 @@
         <a href="#addTask" class="side-link">Add task</a>
     </div>
     <div class="mainPanel">
-        <h3 class="plan-title">
-            Those are Your tasks for today
-        </h3>
         <div class="plan" id="plan">
-            
+            <h3 class="plan-title">
+                Hello, {{user.username}} those are Your tasks for today ,<img src="{{img}}" alt=""> 
+            </h3>
             {% for task in tasks %}
-                <div class="task2">
+                <div class="task {{task.1}}">
                     <h4 style="text-decoration:underline">
-                        {{task.name}}
+                        {{task.0.name}}
                     </h4>
                     <h6>
-                        {{task.description}}
+                        {{task.0.description}}
                     </h6>
                     <p>
-                        has to be done until: {{task.deadline}}
+                        has to be done until: {{task.0.deadline}}
                     </p>
                     <p>
-                        status: {{task.status}}
+                        status: {{task.0.status}}
+                    </p>
+                    <p>
+                        importancy : {{task.0.importancy}}
                     </p>
                     <p>
                         pepole involved:
-                        {% for user in task.users.all %}
+                        {% for user in task.0.users.all %}
                             {{ user.username }},&nbsp;
                         {% endfor %}
                     </p>
@@ -39,14 +41,37 @@
                 
             {% endfor %}
         
-        </div>        
+        </div>
+        <fieldset class="messages">
+            <legend>Your latest messages</legend>
+            {% for message in messages %}
+                <div class="message">
+                   <div class="messageContent">
+                        {{ message.content }}
+                   </div>
+                   <small> sent by:{{message.sender}} on: {{message.date_sent}} </small>
+                </div>
+            {% endfor %}
+        </fieldset>        
         <div class="addTask" id="addTask">
             <h3>Add new task to Your schedule</h3>
             <br>
             {% include 'task_organiser/taskForm.html' %}
         </div>
+        <fieldset class="newFriends">
+            <legend>Add new friends</legend>
+        
+            <div class="addFriendForm">
+                <input type="text" placeholder="Type in username" name="friendUsername" id="">
+                <div class="users_list">
+
+                </div>
+                <button type="button" class="btn-submit">Add</button>
+            </div>
+        </fieldset>   
 
     </div>
 </div>
-<script src="{% static 'js/addClassesHome.js' %}"></script>
+<script src="{% static 'js/home/addClassesHome.js' %}"></script>
+<script src="{% static 'js/home/fetchUsers.js' %}"></script>
 {% endblock %}

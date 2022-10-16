@@ -70,11 +70,11 @@ export default class LayoutManager {
 
             this.subBtn.addEventListener('click', () =>{
                 this.popup.style.display = 'none';
-                resolve()
+                resolve();
             })
             this.cancelBtn.addEventListener('click', () =>{
                 this.popup.style.display = 'none';
-                reject()
+                reject();
             })
         })
     }
@@ -90,8 +90,10 @@ export default class LayoutManager {
             },
         }
         for(let t of this.tasks){
-            if(t.id === id)
+            if(t.id === id){
                 t.toBeDeleted = true;
+                break;
+            }
         }
         this.tasks.sort((t1, t2) => Number(t1.toBeDeleted) - Number(t2.toBeDeleted));
         this.tasks.pop();

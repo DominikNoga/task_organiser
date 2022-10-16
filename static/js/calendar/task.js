@@ -17,7 +17,7 @@ export default class Task{
     }
 
     createDiv = () =>{
-        return `<div class="task2 ${this.class}" id="task${this.id}">
+        return `<div class="task ${this.class}" id="task${this.id}">
     <a href="\\edit_task\\${this.db_id}" class="editTaskLink" title="edit task"><i class="fa fa-edit"></i></a>
     <button class="btn-task" id="btn-task${this.id}" title="delete task"><i class="fa fa-trash"></i></button>
     <h4>

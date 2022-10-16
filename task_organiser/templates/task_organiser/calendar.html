@@ -37,11 +37,8 @@
             </div>
         </div>  
     </div>
-    <div class="planCal" id="planCal">
-        {% include 'task_organiser/tasks.html' %}
-    </div>
 {% endblock %}
 {% block script %}
-    <script type="module" src="{% static 'js/calendar.js' %}"></script>
+    <script type="module" src="{% static 'js/calendar/calendar.js' %}"></script>
 {% endblock %}
 

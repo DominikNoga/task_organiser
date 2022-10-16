@@ -5,3 +5,5 @@ from .models import *
 
 admin.site.register(Task)
 admin.site.register(AppUser)
+admin.site.register(FriendsGroup)
+admin.site.register(Message)

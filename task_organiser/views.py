@@ -17,7 +17,21 @@ def home(request):
             return redirect("home_redirect")
     current_user = request.user
     tasks = current_user.task_set.filter(deadline__contains=date.today()).order_by("deadline")
-    context = {"user": current_user, "tasks": tasks, "form":taskForm, "importancy": importancy}
+    def return_class(x):
+        if x < 3:
+            return "low"
+        elif x > 6:
+            return "high"
+        
+        else:
+            return "medium" 
+    
+    classes = [return_class(task.importancy) for task in tasks]    
+    tasks_classes = [[tasks[i], classes[i]] for i in range(len(tasks))]
+    messages = Message.objects.filter(reciever=current_user).order_by('-date_sent')
+    context = {"user": current_user, "form":taskForm, "importancy": importancy,
+        "tasks": tasks_classes, "messages": messages, 
+    }
     return render(request, "task_organiser/home.html", context)
 
 
@@ -64,7 +78,10 @@ def register_page(request):
 
 @login_required(login_url='login')
 def messages(request):
-    context = {}
+    current_user = request.user
+    user_profile_pic = current_user.appuser.profile_pic
+    context = {"profile_pic": user_profile_pic, 
+    "current_user": current_user}
     return render(request, "task_organiser/messages.html", context)
 
 

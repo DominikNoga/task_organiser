@@ -4,22 +4,56 @@
     <link rel="stylesheet" href="{% static 'css/mess.css'%}">
 {% endblock %}
 {% block content %}
-    <div id="date">
+    <div id="currentId">{{current_user.id}}</div>
+     <div class="container">
+        <div class="sideConversations">
+            <div class="conversationTile"><img src="{% static 'img/blank_user.jpg' %}" alt="" class="profileImg">
+                Last message
+            </div>
+            <div class="conversationTile"><img src="{% static 'img/blank_user.jpg' %}" alt="" class="profileImg">
+                Last message
+            </div>
+            <div class="conversationTile"><img src="{% static 'img/blank_user.jpg' %}" alt="" class="profileImg">
+                Last message
+            </div>
+        </div>
+        <div class="mainConversation">
+            <div class="info">
+                <img src="{{profile_pic}}" alt="" class="profileImg">
+                Blank User
+            </div>
+            <div class="currentMessages">
+                <!-- <div class="messageBig friendRequest">
+                    Hi domin, i want you to be my fiend on 
+                    task_organiser?
+                    <div class="buttonsRequest">
+                        <a href="#">accept</a>
+                        <a href="">rejcet</a>
+                    </div>
+                </div> -->
+            </div>
+            <div class="messageBox">
+                <textarea type="text" class="messageInput" placeholder="What do you wanna write?" rows="2"></textarea>
+                <button class="btn-submit">Send</button>
+            </div>
+        </div>
 
+        <div class="commonTasks">
+            <h4> Tasks for You and </h4>
+            <div class="task high">
+                <h4>Takie tam</h4>
+                <h6>lalala</h6>
+                <p>status: to do</p>
+                <p>importancy:7</p>
+                <p>Users: You and blank_user</p>
+            </div>
+        </div>
     </div>
 {% endblock %}
 {% block script %}
 <script>
-    const div = document.getElementById('date');
-    async function test(){
-        let x = await fetch("http://127.0.0.1:8000/task_api/task_list/")
-        let json_data = await x.json();
-        let task = await json_data;
-        console.log(task);
-        task.forEach(element => {
-            div.innerHTML += new Date(Number(new Date(element.deadline)) - 7200) + "<br/>";
-        });
-    }
-    test()
+    const messages = document.getElementsByClassName("currentMessages")[0]
+    messages.scrollTop = messages.scrollHeight;
 </script>
+<script type="module" src="{% static 'js/messages/messages.js' %}"></script>
 {% endblock %}

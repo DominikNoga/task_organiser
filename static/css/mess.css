@@ -1,5 +1,93 @@
-.box{
-    width: 100px;
-    height: 100px;
-    background-color: red;
+body{
+    background-color: #fff;
+    background-image: none;
+    padding: 0;
+}
+.container{
+    display: grid;
+    grid-template-columns: 20% 50% 30%;
+    width: 98%;
+    min-height:calc(100vh - 5em) ;
+}
+.sideConversations{
+    border-right: 1px solid black;
+    display: flex;
+    flex-direction: column;
+}
+.conversationTile{
+    border-bottom: 1px dotted black;
+    padding: 0.5em 0;
+}
+.conversationTile:hover{
+    background-color: rgb(235, 222, 222);
+    cursor:pointer;
+}
+.mainConversation{
+    border-right:1px solid black;
+    display: flex;
+    flex-direction: column;
+    gap:1em;
+}
+.currentMessages{
+    display: flex;
+    flex-direction: column;
+    gap:2em;
+    max-height: 75vh;
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+.info{
+    border-bottom: black dotted 1px;
+}
+.profileImg{
+    border-radius: 50%;
+    width: 1.5em;
+    height: 1.5em;
+    border:rgba(0, 0, 0, 0.545) solid 1px;
+}
+.messageInput{
+    border-radius: 1em;
+    background-color: rgb(235, 222, 222);
+    border:none;
+    resize: none;
+}
+.messageBox{
+    display: grid;
+    grid-template-columns: 85% 15%;
+    position: sticky;
+    top:97%;
+}
+.commonTasks{
+    text-align: center;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+}
+.task{
+    max-width:80%;
+}
+
+.messageBig{
+    width:fit-content;
+    border-radius:1em;
+    background-color: rgb(235, 222, 222);
+    padding:0.5em;
+}
+.fromYou{
+    background-color:#6d6de9;
+    margin-left:0.5em; 
+}
+.friendRequest, .toYou{
+    align-self:flex-end;
+    margin-right:0.5em; 
+}
+.buttonsRequest a{
+    color:rgb(61, 61, 224);
+}
+#footer {
+    margin:0;
+    height: 2em;
+}
+#currentId{
+    display: none;
 }

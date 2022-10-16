@@ -13,7 +13,7 @@
             <div class="form">
                 <form action="" method="post" class="reg-form">
                     {% csrf_token %}
-                    <div class="inputFields">
+                    <div class="inputFields" minlength="6">
                         {{form.username}}
                     </div>
                     <div class="inputFields">
