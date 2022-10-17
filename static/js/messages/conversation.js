@@ -6,6 +6,8 @@ export default class Conversation{
         this.currentMessages = document.getElementsByClassName('currentMessages')[0];
         this.MESSAGE_CLASS = "messageBig";
         this.infoDiv = document.getElementsByClassName('info')[0];
+        this.h4 = document.querySelector(".commonTasks h4");
+        this.currentMessages.scrollTop = this.currentMessages.scrollHeight;
     }
     get otherUserId(){
         return this._otherUserId
@@ -19,6 +21,10 @@ export default class Conversation{
 </div>`
     }
     
+    fillInfoDiv = (user) =>{
+        this.infoDiv.innerHTML = `<img src="static/img${user.profile_pic}" alt="" class="profileImg">
+${user.username}`
+    }
     createConversationDiv = () =>{
         this.currentMessages.innerHTML = '';
         let css_class = null;
@@ -36,5 +42,11 @@ export default class Conversation{
             return (message.sender === this.otherUserId ||
                 message.reciever === this.otherUserId)
         })
+    }
+    displayUserInfo = (currentFriendId, users) =>{      
+        const currentUser = users.find
+            (user => user.user === currentFriendId);     
+        this.fillInfoDiv(currentUser);
+        this.h4.innerHTML = `Tasks for You and ${currentUser.username}`;
     }
 }

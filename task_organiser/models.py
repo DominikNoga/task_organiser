@@ -31,7 +31,7 @@ class Task(models.Model):
 
 class AppUser(models.Model):
     profile_pic = models.ImageField(null=True,
-        default="{ static 'img/blank_user.jpg' }", blank=True)
+        default="/blank_user.jpg", blank=True)
     username = models.CharField(max_length=100, null=True)
     user = models.OneToOneField(User, on_delete=models.CASCADE,
         primary_key=True)

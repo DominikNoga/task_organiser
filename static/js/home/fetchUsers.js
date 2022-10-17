@@ -1,20 +1,16 @@
+import { sendFriendRequest } from "./sendFriendRequest.js";
+
 const input = document.querySelectorAll(".addFriendForm input")[0];
 const users_list = document.querySelector(".users_list");
 const form = document.querySelector(".addFriendForm");
 const addBtn = document.querySelector(".addFriendForm button");
-
-const sendFriendRequest = async () =>{
-    
-}
 const fillUsersList = async (text) => {
     let current_index = null;
     const url = "http://127.0.0.1:8000/task_api/users_list/"
     const users_api = await fetch(url)
     const users_json = await users_api.json()
     const users = await users_json
-    console.log(users)
     let matching_users = users.filter(user => user.username.includes(text))
-    console.log(matching_users)
     users_list.innerHTML = '';
     for (let user of matching_users) {
         let html = `<div id=user_${user.id}> ${user.username} </div>`

@@ -17,6 +17,8 @@ body{
 .conversationTile{
     border-bottom: 1px dotted black;
     padding: 0.5em 0;
+    display: flex;
+    flex-direction: row;
 }
 .conversationTile:hover{
     background-color: rgb(235, 222, 222);
@@ -41,8 +43,8 @@ body{
 }
 .profileImg{
     border-radius: 50%;
-    width: 1.5em;
-    height: 1.5em;
+    width: 2em;
+    height: 2em;
     border:rgba(0, 0, 0, 0.545) solid 1px;
 }
 .messageInput{
@@ -76,13 +78,15 @@ body{
 .fromYou{
     background-color:#6d6de9;
     margin-left:0.5em; 
+    align-self:flex-end;
 }
 .friendRequest, .toYou{
-    align-self:flex-end;
     margin-right:0.5em; 
 }
-.buttonsRequest a{
+.btn-accepter, .btn-reject{
     color:rgb(61, 61, 224);
+    border:none;
+    background-color: #fff;
 }
 #footer {
     margin:0;
