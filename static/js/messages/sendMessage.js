@@ -1,5 +1,4 @@
-const createMessage = (sender, reciever, content) =>{
-    const type = "reg";
+const createMessage = (sender, reciever, content,type) =>{
     return JSON.stringify({
         content: content,
         type: type,
@@ -7,7 +6,7 @@ const createMessage = (sender, reciever, content) =>{
         reciever: reciever
     })
 }
-export const sendMessage = async (token, sender, reciever, content) =>{
+export const sendMessage = async (token, sender, reciever, content, type) =>{
     const url = "http://127.0.0.1:8000/task_api/send_message/"
     const options = {
         method: "POST",
@@ -15,7 +14,7 @@ export const sendMessage = async (token, sender, reciever, content) =>{
             'Content-type':"application/json",
             'X-CSRFToken': token
         },
-        body: createMessage(sender, reciever, content)
+        body: createMessage(sender, reciever, content, type)
     }
     await fetch(url, options);
 }

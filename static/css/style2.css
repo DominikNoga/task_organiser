@@ -366,3 +366,6 @@ button:hover{
     margin-top: 2em;
     text-align: center;
 }
+#idHome{
+    display: none;
+}

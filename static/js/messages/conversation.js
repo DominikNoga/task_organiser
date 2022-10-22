@@ -1,3 +1,4 @@
+import { fetchApi } from "../functions.js";
 export default class Conversation{
     constructor(currentUserId,otherUserId, messages){
         this._userId = currentUserId;
@@ -15,12 +16,28 @@ export default class Conversation{
     get messages(){
         return this._messages;
     }
-    messageDiv = (message, css_class) =>{
-        return `<div class="${this.MESSAGE_CLASS} ${css_class}">
+    handleFriendRequest = () => {
+        const requestButton = document.querySelector(".currentMessages .btn-accept");
+        if(requestButton === null)
+            return;
+        
+        const url = ""
+        requestButton.addEventListener('click', async () => {
+            const id = Number(requestButton.id[requestButton.id.length - 1]);
+
+        })
+    }
+    messageDiv = (message, cssClass) =>{
+        return `<div class="${this.MESSAGE_CLASS} ${cssClass}">
     ${message.content}
 </div>`
     }
-    
+    disableButtons = () =>{
+        const buttons = document.querySelectorAll("currentMessages button");
+        for(let btn of buttons){
+            btn.disabled = true;
+        }
+    }
     fillInfoDiv = (user) =>{
         this.infoDiv.innerHTML = `<img src="static/img${user.profile_pic}" alt="" class="profileImg">
 ${user.username}`

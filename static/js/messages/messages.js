@@ -6,13 +6,13 @@ import {fetchApi } from "../functions.js";
 const currentUserId = Number(
     document.getElementById("currentId").innerHTML);
 const sideConversations = document.getElementsByClassName('sideConversations')[0];
-let currentFriendId = 4;
 const sendBtn = document.getElementsByClassName('btn-submit')[0];
 const messageInput= document.getElementsByClassName('messageInput')[0];
 const commonTasks = document.getElementsByClassName('commonTasks')[0];
 const urlUsers = "http://127.0.0.1:8000/task_api/app_users_list/";
 const urlMessages = "http://127.0.0.1:8000/task_api/messages_list/";
 const urlTasks = "http://127.0.0.1:8000/task_api/task_list/";
+let currentFriendId = null;
 
 
 const getCurrentFriendId = async () => {
@@ -65,9 +65,10 @@ const displayMessages = async ()=>{
     const conversation = new Conversation(currentUserId,
         currentFriendId, userMessages)
     
-    conversation.setMessages()
+    conversation.setMessages();
     conversation.createConversationDiv();   
     conversation.displayUserInfo(currentFriendId, await fetchApi(urlUsers));
+    conversation.handleFriendRequest();
 }
 const buildTasksDiv = async () =>{
     commonTasks.innerHTML = '<h4></h4>';
@@ -119,7 +120,7 @@ const addTileEvents = (ids) => {
 }
 sendBtn.addEventListener('click', async () => {
     await sendMessage(token, currentUserId, currentFriendId, 
-        messageInput.value);
+        messageInput.value ,"reg");
     await buildLayout();
     messageInput.value = '';
 })

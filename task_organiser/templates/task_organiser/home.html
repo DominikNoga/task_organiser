@@ -7,6 +7,9 @@
         <a href="#plan" class="side-link">Today's plan</a>
         <a href="#addTask" class="side-link">Add task</a>
     </div>
+    <div id="idHome">
+        {{user.id}}
+    </div>
     <div class="mainPanel">
         <div class="plan" id="plan">
             <h3 class="plan-title">
@@ -73,5 +76,5 @@
     </div>
 </div>
 <script src="{% static 'js/home/addClassesHome.js' %}"></script>
-<script src="{% static 'js/home/fetchUsers.js' %}"></script>
+<script type="module" src="{% static 'js/home/fetchUsers.js' %}"></script>
 {% endblock %}

@@ -83,7 +83,7 @@ body{
 .friendRequest, .toYou{
     margin-right:0.5em; 
 }
-.btn-accepter, .btn-reject{
+.btn-accept, .btn-reject{
     color:rgb(61, 61, 224);
     border:none;
     background-color: #fff;

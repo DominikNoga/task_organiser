@@ -1,17 +1,16 @@
-import {fetchApi} from '../functions.js';
-import { csrftoken as token } from "./token.js";
+import { csrftoken as token } from "../messages/token.js";
 import { sendMessage } from '../messages/sendMessage.js';
-export const sendFriendRequest = async (sender, reciever) =>{
-    await sendMessage(token, sender, reciever, createFriendRequestMessage())
+export const sendFriendRequest = async (sender, reciever, username) =>{
+    await sendMessage(token, sender, reciever, createFriendRequestMessage(username, sender), "friend_request")
 }
 
-const createFriendRequestMessage = (user) =>{
-    return `<div class="messageBig friendRequest">
-    Hi ${user.username}, i want you to be my fiend on 
+const createFriendRequestMessage = (username, id) =>{
+    return `
+    Hi ${username}, i want you to be my fiend on 
     task_organiser?
     <div class="buttonsRequest">
-        <button class="btn-accept">accept</button>
+        <button class="btn-accept" id="btn-accept${id}">accept</button>
         <button class="btn-reject">rejcet</button>
     </div>
-</div>`
+`
 }

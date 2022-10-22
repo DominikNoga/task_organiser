@@ -3,7 +3,6 @@ import DateManager from '../calendar/dateManager.js';
 const dm = new DateManager();
 export const displayTasks = async (userId, friendId, allTasks, div) => {
     const tasks = await getTasks(userId, friendId, allTasks)
-    console.log(tasks)
     tasks.forEach(task => {
         div.innerHTML += taskDiv(task)
     });
