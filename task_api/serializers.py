@@ -1,8 +1,10 @@
 from dataclasses import fields
-import imp
+from pyexpat import model
 from task_organiser.models import *
 from django.contrib.auth.models import User
 from rest_framework import serializers
+from rest_framework.fields import empty
+
 
 class TaskSerializer(serializers.ModelSerializer):
     class Meta:
@@ -27,3 +29,9 @@ class MessageSerializer(serializers.ModelSerializer):
         model = Message
         fields = "__all__"
 
+
+class UpdateAppUserSerializer(serializers.ModelSerializer):
+    friends = AppUserSerializer(many=True, read_only=True)
+    class Meta:
+        model = AppUser
+        fields = ["friends"]

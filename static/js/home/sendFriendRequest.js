@@ -1,7 +1,7 @@
 import { csrftoken as token } from "../messages/token.js";
 import { sendMessage } from '../messages/sendMessage.js';
 export const sendFriendRequest = async (sender, reciever, username) =>{
-    await sendMessage(token, sender, reciever, createFriendRequestMessage(username, sender), "friend_request")
+    await sendMessage(token, sender, reciever, createFriendRequestMessage(username, sender), "fr")
 }
 
 const createFriendRequestMessage = (username, id) =>{

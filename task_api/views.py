@@ -1,3 +1,4 @@
+from http.client import NOT_FOUND
 from urllib import response
 from task_organiser.models import *
 from django.contrib.auth.models import User
@@ -57,12 +58,21 @@ def app_user_list(request):
 @api_view(['POST'])
 def update_app_user(request, pk):
     app_user = AppUser.objects.get(user=pk)
-    serializer = TaskSerializer(instance=app_user, 
-        data=request.data)
+    serializer = UpdateAppUserSerializer(app_user, data=request.data)
+
+    serializer.is_valid(raise_exception=True)
+    print("KUTAAAS")
+    serializer.save()
     
-    if serializer.is_valid():
-        serializer.save()
+    friends = []
+    for friend_id in request.data.get('friends'):
+        try:
+            friend = AppUser.objects.get(user=friend_id)
+            friends.append(friend)
+        except:
+            print("user not found")
     
+    app_user.friends.set(friends)
     return Response(serializer.data)
 
 
@@ -79,3 +89,24 @@ def send_message(request):
         serializer.save()
     
     return Response(serializer.data)
+
+
+@api_view(["PUT"])
+def update_message(request, pk):
+    message = Message.objects.get(id=pk)
+    serializer = MessageSerializer(instance=message,data=request.data)
+  
+    if serializer.is_valid():
+        serializer.save()
+        print("KNAGAAAAA")
+    
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+def app_user_detail(request, pk):
+    user = AppUser.objects.get(user=pk)
+    serializer = AppUserSerializer(user, many=False)
+    return Response(serializer.data)
+
+

@@ -74,5 +74,6 @@ const displayMessage = (text) => {
     main.appendChild(div);
     setTimeout(()=>{
         main.removeChild(div);
-    }, 5000);
+    }, 3000);
 };
+localStorage.clear();
