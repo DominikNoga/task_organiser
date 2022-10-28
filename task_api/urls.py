@@ -4,6 +4,7 @@ from django.urls import path
 urlpatterns = [
     path('', views.home_api, name='home_api'),
     path('task_list/', views.task_list, name='task_list'),
+    path('create_task/', views.create_task, name='create_task'),
     path('app_users_list/', views.app_user_list, name='app_users_list'),
     path('task_detail/<str:pk>', views.task_detail, name='task_detail'),
     path('app_user_detail/<str:pk>', views.app_user_detail, name='app_user_detail'),
@@ -15,4 +16,5 @@ urlpatterns = [
     path('group_list/', views.group_list, name='group_list'),
     path('create_group/', views.create_group, name='create_group'),
     path('update_group/<str:pk>', views.update_group, name='update_group'),
+    path('update_task/<str:pk>', views.update_task, name='update_task'),
 ]

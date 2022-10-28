@@ -1,5 +1,12 @@
 {% extends 'task_organiser/main_template.html' %}
 {%load static %}
+{% block head %}
+<style>
+    .task{
+        width: fit-content;
+    }
+</style>
+{% endblock %}
 {% block content %}
 
 <div class="mainContainer">
@@ -45,11 +52,10 @@
             {% endfor %}
         
         </div>
-        <div class="addTask" id="addTask">
+        <form class="addTask" id="addTask">
             <h3>Add new task to Your schedule</h3>
-            <br>
             {% include 'task_organiser/taskForm.html' %}
-        </div>   
+        </form>   
         <fieldset class="createGroupForm">
             <legend>Create new group</legend>
             <input type="text" name="groupName" 
@@ -87,4 +93,5 @@
 </div>
 <script src="{% static 'js/home/addClassesHome.js' %}"></script>
 <script type="module" src="{% static 'js/home/home.js' %}"></script>
+<script type="module" src="{% static 'js/taskForm.js' %}"></script>
 {% endblock %}

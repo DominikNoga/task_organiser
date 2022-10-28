@@ -1,22 +1,42 @@
-<form action="" method="post" id="task-form">
-    {% csrf_token %}
-    
-    {% for field in form %}
-        {% if field.label != "Importancy" %}
-            <p class="form-par">
-                <label>{{ field.label }}</label> {{ field }}
-            </p>
-        {% else %}
-            <div class="form-par">
-                <label>{{ field.label }} </label>
-                <div class="taskInputField">
-                    {{ field }} <div class="rangeValue">{{ importancy }}</div>
-                </div>
-            </div>
-        {% endif %}
-    {% endfor %}
-    <p>
-        <button type="submit" class="btn-submit">submit</button>
-        <button href="{% url 'calendar' %}" type="reset" class="btn-cancel">cancel</button>
-    </p>
+<div class="form-par">
+    <label>Name</label> <input type="text" id="name" required>
+</div>
+<div class="form-par">
+    <label>Description</label> <textarea id="description" rows="1"></textarea>
+</div>
+<div class="form-par">
+    <label>Status</label> 
+    <select id="status">
+        <option value="to do">to do</option>
+        <option value="in progress">in progress</option>
+    </select>
+</div>
+<div class="form-par">
+    <label>Deadline</label> <input type="datetime-local" id="deadline" id="" required>
+</div>
+<div class="form-par">
+    <label>Importancy</label> 
+    <div class="taskInputField">
+        <input type="range" min="1" max="9" id="importancy"> 
+        <div class="rangeValue"></div>
+    </div>
+</div>
+<div class="form-par">
+    <label>Group</label> 
+    <select id="groupSelect">
+        <option value="Just You">Just You</option>
+    </select>
+</div>
+<div class="form-par">
+    <label>Users</label>
+    <div id="userSelectDiv">
+        <select id="userSelect" multiple>
+        
+        </select>
+    </div>
+</div>
+<div>
+    <button type="submit" class="btn-submit">submit</button>
+    <button class="btn-cancel">cancel</button>
+</div>
 </form>

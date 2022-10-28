@@ -1,7 +1,7 @@
 import DateManager from './dateManager.js'
 export default class Task{
     constructor(name, description, status,
-        deadline, date, importancy, users, id, db_id){
+        deadline, date, importancy, users, id, db_id, group){
         this.deadline = deadline;
         this.dm = new DateManager();
         this.importancy = importancy;
@@ -14,6 +14,7 @@ export default class Task{
         this.toBeDeleted = false;
         this.id = id;
         this.db_id  = Number(db_id);
+        this.group = group;
     }
 
     createDiv = () =>{
@@ -30,6 +31,7 @@ export default class Task{
     <p>Status: ${this.status}</p>
     <p>Importancy: ${this.importancy}</p>
     <p>Users: ${this.users}</p>
+    <p>Group: ${this.group}</p>
     
 </div>`
     }

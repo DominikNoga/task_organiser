@@ -40,6 +40,14 @@ def task_delete(request, pk):
     task.delete()
     return Response()
 
+@api_view(['POST'])
+def create_task(request):
+    serializer = TaskSerializer(data=request.data)
+    
+    if serializer.is_valid():
+        serializer.save()
+    
+    return Response(serializer.data)
 
 @api_view(['GET'])
 def users_list(request):
@@ -127,4 +135,22 @@ def update_group(request, pk):
             print("user not found")
     
     group.members.set(members)
+    return Response(serializer.data)
+
+
+@api_view(["POST"])
+def update_task(request, pk):
+    task = Task.objects.get(id=pk)
+    serializer = UpdateTaskSerializer(task, data=request.data)
+    serializer.is_valid(raise_exception=True)
+    serializer.save()
+    users = []
+    for user_id in request.data.get('users'):
+        try:
+            user = AppUser.objects.get(user=user_id)
+            users.append(user.id)
+        except:
+            print("user not found")
+    
+    task.users.set(users)
     return Response(serializer.data)
