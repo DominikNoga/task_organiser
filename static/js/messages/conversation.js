@@ -1,4 +1,4 @@
-import { fetchApi } from "../functions.js";
+import { fetchApi, displayMessage } from "../functions.js";
 import {csrftoken as token} from "./token.js"
 export default class Conversation{
     constructor(currentUserId,otherUserId, messages){
@@ -17,26 +17,40 @@ export default class Conversation{
     get messages(){
         return this._messages;
     }
+    friendRequestToYou = async (id) => {
+        const urlUpdate = `http://127.0.0.1:8000/task_api/update_app_user/${this._userId}`;
+        const urlDetail = `http://127.0.0.1:8000/task_api/app_user_detail/${this._userId}`;
+        const appUser = await fetchApi(urlDetail);
+        let popupMessage = "You have successfully added a new friend";
+        if(appUser.friends.includes(id)){
+            popupMessage = "You have already added this friend";
+            displayMessage(popupMessage);
+            return;
+        }
+        appUser.friends.push(id);
+        const options = {
+            method:'POST',
+            headers:{
+                'Content-type':'application/json',
+                'X-CSRFToken':token,
+            },
+            body:JSON.stringify({friends: appUser.friends})
+        };
+        const send = await fetch(urlUpdate, options);
+        displayMessage(popupMessage);
+        
+    }
+    friendRequestFromYou = () => {
+        displayMessage("You sent the friend request so you cannot accept it")
+    }
     handleFriendRequest = () => {
         const requestButton = document.querySelector(".currentMessages .btn-accept");
         if(requestButton === null)
             return;
         requestButton.addEventListener('click', async () => {
             const id = Number(requestButton.id[requestButton.id.length - 1]);
-            const urlUpdate = `http://127.0.0.1:8000/task_api/update_app_user/${this._userId}`;
-            const urlDetail = `http://127.0.0.1:8000/task_api/app_user_detail/${this._userId}`;
-            const appUser = await fetchApi(urlDetail);
-            appUser.friends.push(id);
-            console.log(JSON.stringify({friends: appUser.friends}))
-            const options = {
-				method:'POST',
-				headers:{
-					'Content-type':'application/json',
-					'X-CSRFToken':token,
-				},
-				body:JSON.stringify({friends: appUser.friends})
-			};
-            const send = await fetch(urlUpdate, options);
+
+            id === this._userId ? this.friendRequestFromYou() : await this.friendRequestToYou(id);
         })
     }
     messageDiv = (message, cssClass) =>{

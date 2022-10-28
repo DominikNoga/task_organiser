@@ -61,7 +61,6 @@ def update_app_user(request, pk):
     serializer = UpdateAppUserSerializer(app_user, data=request.data)
 
     serializer.is_valid(raise_exception=True)
-    print("KUTAAAS")
     serializer.save()
     
     friends = []
@@ -91,18 +90,6 @@ def send_message(request):
     return Response(serializer.data)
 
 
-@api_view(["PUT"])
-def update_message(request, pk):
-    message = Message.objects.get(id=pk)
-    serializer = MessageSerializer(instance=message,data=request.data)
-  
-    if serializer.is_valid():
-        serializer.save()
-        print("KNAGAAAAA")
-    
-    return Response(serializer.data)
-
-
 @api_view(['GET'])
 def app_user_detail(request, pk):
     user = AppUser.objects.get(user=pk)
@@ -110,3 +97,34 @@ def app_user_detail(request, pk):
     return Response(serializer.data)
 
 
+@api_view(['GET'])
+def group_list(request):
+    groups = FriendsGroup.objects.all()
+    serializer = FriendsGroupSerializer(groups, many=True)
+    return Response(serializer.data)
+
+
+@api_view(["POST"])
+def create_group(request):
+    serializer = FriendsGroupSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+    return Response(serializer.data)
+
+
+@api_view(["PUT"])
+def update_group(request, pk):
+    group = FriendsGroup.objects.get(id=pk)
+    serializer = CreateGroupSerializer(group, data=request.data)
+    serializer.is_valid(raise_exception=True)
+    serializer.save()
+    members = []
+    for member_id in request.data.get('members'):
+        try:
+            member = AppUser.objects.get(user=member_id)
+            members.append(member)
+        except:
+            print("user not found")
+    
+    group.members.set(members)
+    return Response(serializer.data)

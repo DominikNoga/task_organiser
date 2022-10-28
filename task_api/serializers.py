@@ -35,3 +35,16 @@ class UpdateAppUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = AppUser
         fields = ["friends"]
+
+
+class FriendsGroupSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = FriendsGroup
+        fields = "__all__"
+
+
+class CreateGroupSerializer(serializers.ModelSerializer):
+    members = AppUserSerializer(many=True, read_only=True)
+    class Meta:
+        model = FriendsGroup
+        fields = ["group_name", "members"]

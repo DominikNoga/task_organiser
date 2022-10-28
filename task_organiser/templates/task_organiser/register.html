@@ -26,6 +26,9 @@
                         {{form.password2}}
                     </div>
                     <button type="submit" class="reg-btn">Sign up</button>
+                    <div class="errorMessages">
+                        {{from.errors}}
+                    </div>
                 </form>
                 <a href="{% url 'login' %}" class="loginLink">If You already have an account sign in</a>
             </div>

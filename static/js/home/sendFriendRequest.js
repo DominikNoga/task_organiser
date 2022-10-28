@@ -6,8 +6,7 @@ export const sendFriendRequest = async (sender, reciever, username) =>{
 
 const createFriendRequestMessage = (username, id) =>{
     return `
-    Hi ${username}, i want you to be my fiend on 
-    task_organiser?
+    Hi ${username}, do you want to be my friend on task_organiser?
     <div class="buttonsRequest">
         <button class="btn-accept" id="btn-accept${id}">accept</button>
         <button class="btn-reject">rejcet</button>

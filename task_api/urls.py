@@ -8,9 +8,11 @@ urlpatterns = [
     path('task_detail/<str:pk>', views.task_detail, name='task_detail'),
     path('app_user_detail/<str:pk>', views.app_user_detail, name='app_user_detail'),
     path('update_app_user/<str:pk>', views.update_app_user, name='update_app_user'),
-    path('update_message/<str:pk>', views.update_message, name='update_message'),
     path('task_delete/<str:pk>', views.task_delete, name='task_delete'),
     path('users_list/', views.users_list, name='users_list'),
     path("messages_list/", views.messages_list, name='messages_list'),
     path('send_message/', views.send_message, name='send_message'),
+    path('group_list/', views.group_list, name='group_list'),
+    path('create_group/', views.create_group, name='create_group'),
+    path('update_group/<str:pk>', views.update_group, name='update_group'),
 ]

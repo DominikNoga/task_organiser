@@ -13,7 +13,7 @@
     <div class="mainPanel">
         <div class="plan" id="plan">
             <h3 class="plan-title">
-                Hello, {{user.username}} those are Your tasks for today ,<img src="{{img}}" alt=""> 
+                Hello, {{user.username}} those are Your tasks for today
             </h3>
             {% for task in tasks %}
                 <div class="task {{task.1}}">
@@ -21,7 +21,7 @@
                         {{task.0.name}}
                     </h4>
                     <h6>
-                        {{task.0.description}}
+                       description: {{task.0.description}}
                     </h6>
                     <p>
                         has to be done until: {{task.0.deadline}}
@@ -45,36 +45,46 @@
             {% endfor %}
         
         </div>
-        <fieldset class="messages">
-            <legend>Your latest messages</legend>
-            {% for message in messages %}
-                <div class="message">
-                   <div class="messageContent">
-                        {{ message.content }}
-                   </div>
-                   <small> sent by:{{message.sender}} on: {{message.date_sent}} </small>
-                </div>
-            {% endfor %}
-        </fieldset>        
         <div class="addTask" id="addTask">
             <h3>Add new task to Your schedule</h3>
             <br>
             {% include 'task_organiser/taskForm.html' %}
-        </div>
+        </div>   
+        <fieldset class="createGroupForm">
+            <legend>Create new group</legend>
+            <input type="text" name="groupName" 
+            class="friendGroupInput" placeholder="Add group name ...">
+            
+            <input type="text" id="friendName" 
+            class="friendGroupInput"
+            placeholder="enter a name of friend you'd like to add">
+            <div class="friendTiles">
+
+            </div>
+            <h4>Your current group</h4>
+            <p class="groupName">
+                Group name:
+            </p>
+            <div class="friendTiles">
+
+            </div>
+            <button class="btn-submit" id="createGroupBtn">
+                Create Group
+            </button>
+        </fieldset>
         <fieldset class="newFriends">
             <legend>Add new friends</legend>
         
             <div class="addFriendForm">
-                <input type="text" placeholder="Type in username" name="friendUsername" id="">
+                <input type="text" placeholder="Type in username" name="friendUsername" class="friendGroupInput">
                 <div class="users_list">
 
                 </div>
                 <button type="button" class="btn-submit">Add</button>
             </div>
-        </fieldset>   
-
+        </fieldset>
     </div>
 </div>
 <script src="{% static 'js/home/addClassesHome.js' %}"></script>
-<script type="module" src="{% static 'js/home/fetchUsers.js' %}"></script>
+<script type="module" src="{% static 'js/home/home.js' %}"></script>
 {% endblock %}

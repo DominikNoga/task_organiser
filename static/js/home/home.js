@@ -1,14 +1,13 @@
 import { sendFriendRequest } from "./sendFriendRequest.js";
-import {fetchApi} from '../functions.js';
-
+import {fetchApi, displayMessage} from '../functions.js';
+import GroupManager from "./groups.js";
 const input = document.querySelectorAll(".addFriendForm input")[0];
 const users_list = document.querySelector(".users_list");
-const form = document.querySelector(".addFriendForm");
 const addBtn = document.querySelector(".addFriendForm button");
 const currentUserId = Number(document.querySelector("#idHome").textContent);
 let current_index = null;
-let friendId = -1;
 let username = "";
+const gm = new GroupManager(currentUserId);
 const getNotFriends = async () =>{
     const app_users_url = "http://127.0.0.1:8000/task_api/app_users_list/";
     let users = await fetchApi(app_users_url)
@@ -37,6 +36,25 @@ const fillUsersList = async (text) => {
         })
     })
 };
+const addFriend = async () => {
+    if(current_index == null || current_index == undefined){
+        displayMessage("there is no such user")
+        return;
+    }
+
+    let txt = `You have successfully sent a friend request!`;
+
+    if(localStorage.getItem(`requestSent${current_index}`)==="sent"){
+        txt = "You have already sent a friend request to this user"
+        displayMessage(txt);
+        return;
+    }
+    await sendFriendRequest(currentUserId, current_index, username);
+    displayMessage(txt);
+    users_list.innerHTML = '';
+    input.value = '';
+    localStorage.setItem(`requestSent${current_index}`, "sent")
+}
 input.addEventListener("input", async () => {
     let text = input.value;
     if(text.length > 0) 
@@ -47,33 +65,13 @@ input.addEventListener("input", async () => {
 
 addBtn.addEventListener("click", async () =>{
     try{
-        if(current_index === null)
-            return;
-        let txt = `You have successfully sent a friend request!`;
-        if(localStorage.getItem(`requestSent${current_index}`)==="sent"){
-            txt = "You have already sent a friend request to this user"
-            displayMessage(txt);
-            return;
-        }
-        await sendFriendRequest(currentUserId, current_index, username);
-        displayMessage(txt);
-        users_list.innerHTML = '';
-        input.value = '';
-        localStorage.setItem(`requestSent${current_index}`, "sent")
+        await addFriend();
     }catch(e){
-        console.log(e);
+        alert(e);
     }
 });
-
-const displayMessage = (text) => {
-    const main = document.querySelector(".mainContainer");
-    const div  = document.createElement("div");
-    div.classList.add("popupMessage");
-    div.innerHTML = text;
-    div.style.display = "block";
-    main.appendChild(div);
-    setTimeout(()=>{
-        main.removeChild(div);
-    }, 3000);
-};
-localStorage.clear();
+const initGm = async () =>{
+    await gm.displayGroupTiles();
+    gm.initAll();
+}
+initGm();

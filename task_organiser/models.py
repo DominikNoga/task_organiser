@@ -60,7 +60,7 @@ class Message(models.Model):
 
 
 class FriendsGroup(models.Model):
-    members = models.ManyToManyField(User)
+    members = models.ManyToManyField(AppUser)
     group_name = models.CharField(max_length=40, null=True)
     
     def __str__(self):
