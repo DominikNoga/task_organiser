@@ -19,6 +19,8 @@ labels.forEach((label) => {
 const range = document.querySelectorAll("input[type='range']")[0];
 range.classList.replace("taskInputField", "rangeInputField");
 const rangeDiv = document.getElementsByClassName("rangeValue")[0];
+rangeDiv.innerText = 1;
+range.value = 1;
 range.addEventListener("input", () => {
     rangeDiv.innerText = range.value; 
 })

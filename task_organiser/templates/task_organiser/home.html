@@ -45,6 +45,9 @@
                             {{ user.username }},&nbsp;
                         {% endfor %}
                     </p>
+                    <p>
+                        Group: {{ task.0.group }}
+                    </p>
                     
                     
                 </div>    
@@ -52,10 +55,6 @@
             {% endfor %}
         
         </div>
-        <form class="addTask" id="addTask">
-            <h3>Add new task to Your schedule</h3>
-            {% include 'task_organiser/taskForm.html' %}
-        </form>   
         <fieldset class="createGroupForm">
             <legend>Create new group</legend>
             <input type="text" name="groupName" 
@@ -91,7 +90,5 @@
         </fieldset>
     </div>
 </div>
-<script src="{% static 'js/home/addClassesHome.js' %}"></script>
 <script type="module" src="{% static 'js/home/home.js' %}"></script>
-<script type="module" src="{% static 'js/taskForm.js' %}"></script>
 {% endblock %}

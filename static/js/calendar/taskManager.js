@@ -1,16 +1,22 @@
 import Task from './task.js';
 import DateManager from './dateManager.js';
-import {fetchApi} from '../functions.js';
+import Api from '../api/api.js';
+import GroupManager from '../home/groups.js';
+import TaskApi from '../api/taskApi.js';
 export default class TaskManager{
     constructor(){
         this.dm = new DateManager();
+        this.gm = new GroupManager();
+        this.api = new Api();
+        this.taskApi = new TaskApi();
     }
     createTaskArray = async () => {
         let taskArr = [];
-        const tasks = await fetchApi("http://127.0.0.1:8000/task_api/task_list/");
-        const users = await fetchApi("http://127.0.0.1:8000/task_api/users_list/");
-        const groups = await fetchApi("http://127.0.0.1:8000/task_api/group_list/");
-        tasks.forEach((task, i) => {
+        const currenUserId = Number(localStorage.getItem("currentUserId"));
+        const userTasks = await this.taskApi.getUserTasks(currenUserId);
+        const users = await this.api.read("http://127.0.0.1:8000/task_api/users_list/");
+        const groups = await this.api.read("http://127.0.0.1:8000/task_api/group_list/");
+        userTasks.forEach((task, i) => {
             const userIndexes = task.users;
             const usernames = users.map((user) => {
                 for(let id of userIndexes){
@@ -27,10 +33,11 @@ export default class TaskManager{
                 this.dm.stringToDate(task.deadline),
                 this.dm.stringToDate(task.date_added),
                 task.importancy,
-                usernames, i,
+                usernames,
                 task.id,
                 groupName
             ))
+            
         })
         return taskArr;
     }

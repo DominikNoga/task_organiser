@@ -1,31 +1,26 @@
 import DateManager from '../calendar/dateManager.js';
 
 const dm = new DateManager();
-export const displayTasks = async (userId, friendId, allTasks, div) => {
-    const tasks = await getTasks(userId, friendId, allTasks)
+export const displayTasks = (userId, friendId, allTasks, div) => {
+    const tasks = getTasks(userId, friendId, allTasks)
     tasks.forEach(task => {
-        div.innerHTML += taskDiv(task)
+        let cssClass = Number(task.importancy) > 3 ? (Number(task.importancy) > 6 ? "high" : "medium" ) : "low"
+        div.innerHTML += taskDiv(task, cssClass)
     });
 }
-const getTasks = async (userId, friendId, allTasks) => {
+const getTasks = (userId, friendId, allTasks) => {
     let ids = `${userId} ${friendId}`;
     let idsReversed = `${friendId} ${userId}`
-    let tasks = await allTasks.filter(task => {
+    return allTasks.filter(task => {
         let users = task.users.join(" ");
-        if(users.includes(ids)
-            || users.includes(idsReversed)
-        )
+        if(users.includes(ids) || users.includes(idsReversed))
             return true;
         
         return false;
     })
-    return tasks;
-
 }
-const taskDiv = (task) => {
-    return `<div class="task low">
-    <a href="\\edit_task\\${task.id}" class="editTaskLink" title="edit task"><i class="fa fa-edit"></i></a>
-    <button class="btn-task" id="btn-task${task.id}" title="delete task"><i class="fa fa-trash"></i></button>
+const taskDiv = (task, cssClass) => {
+    return `<div class="task ${cssClass}">
     <h4>
         Task: ${task.name}
     </h4>

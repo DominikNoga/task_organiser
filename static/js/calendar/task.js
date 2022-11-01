@@ -1,7 +1,7 @@
 import DateManager from './dateManager.js'
 export default class Task{
     constructor(name, description, status,
-        deadline, date, importancy, users, id, db_id, group){
+        deadline, date, importancy, users, db_id, group){
         this.deadline = deadline;
         this.dm = new DateManager();
         this.importancy = importancy;
@@ -12,15 +12,14 @@ export default class Task{
         this.users = users;
         this.class = this.importancy > 3 ? (this.importancy > 6 ? "high" : "medium" ) : "low"
         this.toBeDeleted = false;
-        this.id = id;
         this.db_id  = Number(db_id);
         this.group = group;
     }
 
     createDiv = () =>{
         return `<div class="task ${this.class}" id="task${this.id}">
-    <a href="\\edit_task\\${this.db_id}" class="editTaskLink" title="edit task"><i class="fa fa-edit"></i></a>
-    <button class="btn-task" id="btn-task${this.id}" title="delete task"><i class="fa fa-trash"></i></button>
+    <button class="btn-edit" id="btn-edit${this.db_id}" title="edit task" ><i class="fa fa-edit"></i></button>
+    <button class="btn-task" id="btn-task${this.db_id}" title="delete task"><i class="fa fa-trash"></i></button>
     <h4>
         Task: ${this.name}
     </h4>
@@ -31,9 +30,7 @@ export default class Task{
     <p>Status: ${this.status}</p>
     <p>Importancy: ${this.importancy}</p>
     <p>Users: ${this.users}</p>
-    <p>Group: ${this.group}</p>
-    
+    <p>Group: ${this.group}</p> 
 </div>`
     }
-
 }

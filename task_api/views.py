@@ -147,7 +147,7 @@ def update_task(request, pk):
     users = []
     for user_id in request.data.get('users'):
         try:
-            user = AppUser.objects.get(user=user_id)
+            user = User.objects.get(id=user_id)
             users.append(user.id)
         except:
             print("user not found")

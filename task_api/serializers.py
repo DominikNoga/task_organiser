@@ -12,8 +12,6 @@ class TaskSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-
-
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
@@ -53,7 +51,7 @@ class CreateGroupSerializer(serializers.ModelSerializer):
 
 
 class UpdateTaskSerializer(serializers.ModelSerializer):
-    users = AppUserSerializer(many=True, read_only=True)
+    users = UserSerializer(many=True, read_only=True)
     class Meta:
         model = Task
         fields = "__all__"

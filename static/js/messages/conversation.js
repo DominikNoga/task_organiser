@@ -1,7 +1,8 @@
-import { fetchApi, displayMessage } from "../functions.js";
-import {csrftoken as token} from "./token.js"
+import Api from "../api/api.js";
+import { displayMessage } from "../functions.js";
 export default class Conversation{
     constructor(currentUserId,otherUserId, messages){
+        this.api = new Api();
         this._userId = currentUserId;
         this._otherUserId = otherUserId;
         this._messages = messages;
@@ -20,7 +21,7 @@ export default class Conversation{
     friendRequestToYou = async (id) => {
         const urlUpdate = `http://127.0.0.1:8000/task_api/update_app_user/${this._userId}`;
         const urlDetail = `http://127.0.0.1:8000/task_api/app_user_detail/${this._userId}`;
-        const appUser = await fetchApi(urlDetail);
+        const appUser = await this.api.read(urlDetail);
         let popupMessage = "You have successfully added a new friend";
         if(appUser.friends.includes(id)){
             popupMessage = "You have already added this friend";
@@ -28,20 +29,13 @@ export default class Conversation{
             return;
         }
         appUser.friends.push(id);
-        const options = {
-            method:'POST',
-            headers:{
-                'Content-type':'application/json',
-                'X-CSRFToken':token,
-            },
-            body:JSON.stringify({friends: appUser.friends})
-        };
-        const send = await fetch(urlUpdate, options);
+        this.api.createOrUpdate(urlUpdate, {friends: appUser.friends},
+            "POST")
         displayMessage(popupMessage);
         
     }
     friendRequestFromYou = () => {
-        displayMessage("You sent the friend request so you cannot accept it")
+        displayMessage("You sent the friend request so you cannot accept it");
     }
     handleFriendRequest = () => {
         const requestButton = document.querySelector(".currentMessages .btn-accept");

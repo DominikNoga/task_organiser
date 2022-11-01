@@ -1,8 +1,9 @@
 import Conversation from "./conversation.js";
-import { sendMessage } from "./sendMessage.js";
-import { csrftoken as token } from "./token.js";
 import { displayTasks } from "./displayTasks.js";
-import {fetchApi } from "../functions.js";
+import Api from "../api/api.js";
+import MessageApi from "../api/messageApi.js";
+const api = new Api();
+const messageApi = new MessageApi();
 const currentUserId = Number(
     document.getElementById("currentId").innerHTML);
 const sideConversations = document.getElementsByClassName('sideConversations')[0];
@@ -16,12 +17,7 @@ let currentFriendId = null;
 
 
 const getCurrentFriendId = async () => {
-    const messages = await fetchApi(urlMessages);
-    const userMessages = messages.filter(message => 
-        (message.reciever === currentUserId || 
-            message.sender === currentUserId) 
-    
-    );
+    const userMessages = await messageApi.getUserMessages(currentUserId);
     const lastMessage = userMessages[userMessages.length - 1];
     return (lastMessage.reciever === currentUserId ? 
         lastMessage.sender : lastMessage.reciever)
@@ -34,7 +30,7 @@ const createUsersArray = async (messages) => {
             message.reciever : message.sender);
         idsSet.add(id);
     })
-    let users = await fetchApi(urlUsers);
+    let users = await api.read(urlUsers);
     users = users.filter(user => {
         for(let id of idsSet){
             if(user.user === id)
@@ -54,37 +50,24 @@ const ConversationTile = (user, messages) =>{
     </div>
 </div>`
 }
-
 const displayMessages = async ()=>{
-    const messages = await fetchApi(urlMessages);
-    const userMessages = messages.filter(message => 
-        (message.reciever === currentUserId || 
-            message.sender === currentUserId) 
-    
-    )
+    const userMessages = await messageApi.getUserMessages(currentUserId);
     const conversation = new Conversation(currentUserId,
         currentFriendId, userMessages)
-    
     conversation.setMessages();
     conversation.createConversationDiv();   
-    conversation.displayUserInfo(currentFriendId, await fetchApi(urlUsers));
+    conversation.displayUserInfo(currentFriendId, await api.read(urlUsers));
     conversation.handleFriendRequest();
 }
 const buildTasksDiv = async () =>{
     commonTasks.innerHTML = '<h4></h4>';
-    const tasksApi = await fetchApi(urlTasks);
-    await displayTasks(currentUserId, currentFriendId, tasksApi,
-        commonTasks); 
-
+    const tasksApi = await api.read(urlTasks);
+    displayTasks(currentUserId, currentFriendId, tasksApi,
+        commonTasks);
 }
 const displayConversationTiles = async () =>{
     sideConversations.innerHTML = ''
-    const messages = await fetchApi(urlMessages);
-    const userMessages = messages.filter(message => 
-        (message.reciever === currentUserId || 
-            message.sender === currentUserId) 
-    
-    )
+    const userMessages = await messageApi.getUserMessages(currentUserId);
     const userArray = await createUsersArray(userMessages)
     let conversations = [];
     userArray.forEach(user => {
@@ -105,9 +88,6 @@ const buildLayout = async () => {
     await displayMessages();
     await displayConversationTiles()
 }
-
-
-
 const addTileEvents = (ids) => {
     const tiles = document.getElementsByClassName('conversationTile');
     for(let i = 0; i < tiles.length; i++) {
@@ -119,7 +99,7 @@ const addTileEvents = (ids) => {
     }
 }
 sendBtn.addEventListener('click', async () => {
-    await sendMessage(token, currentUserId, currentFriendId, 
+    await messageApi.sendMessage(currentUserId, currentFriendId, 
         messageInput.value ,"reg");
     await buildLayout();
     messageInput.value = '';

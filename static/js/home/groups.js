@@ -1,21 +1,23 @@
-import { fetchApi, displayMessage } from "../functions.js";
-import { csrftoken as token } from "../messages/token.js";
+import { displayMessage } from "../functions.js";
+import Api from "../api/api.js";
 export default class GroupManager{
-    constructor(id){
+    constructor(){
+        this.api = new Api();
         this.friendTilesDivUp = document.querySelectorAll(".friendTiles")[0];
         this.friendTilesDivDown = document.querySelectorAll(".friendTiles")[1];
         this.nameInput = document.querySelector(".createGroupForm input");
         this.namePar = document.querySelector(".groupName");
         this.currentGroup = [];
-        this.currentUserId = id;
+        this.currentUserId = Number(localStorage.getItem("currentUserId"));
+        this.groupListUrl = "http://127.0.0.1:8000/task_api/group_list/"
     }
     displayGroupTiles = async () =>{
         const urlAllUsers = "http://127.0.0.1:8000/task_api/app_users_list/"
         const urlCurrentUser = `http://127.0.0.1:8000/task_api/app_user_detail/${this.currentUserId}`
-        const currentUser = await fetchApi(urlCurrentUser)
+        const currentUser = await this.api.read(urlCurrentUser)
         const currentUserFriends = currentUser.friends;
 
-        const allUsers = await fetchApi(urlAllUsers)
+        const allUsers = await this.api.read(urlAllUsers)
         const allFriends = allUsers.filter(friend => 
             currentUserFriends.includes(friend.user)
         )
@@ -57,7 +59,7 @@ export default class GroupManager{
         divToRemove.removeChild(childToRemove);
         
         const urlCurrentUser = `http://127.0.0.1:8000/task_api/app_user_detail/${id}`;
-        const friendToMove = await fetchApi(urlCurrentUser);
+        const friendToMove = await this.api.read(urlCurrentUser);
         divToFill.innerHTML += this.friendTileDiv(friendToMove, btnClass, btnText);
         dir === "down" ? this.currentGroup.push(friendToMove) :
             this.removeChosenElement(friendToMove);
@@ -87,15 +89,7 @@ export default class GroupManager{
         const members = this.currentGroup.map(user => user.user);
         members.push(this.currentUserId);
         const group = {group_name:this.nameInput.value, members: members}
-        const options = {
-            method: "POST",
-            headers: {
-                'Content-type':"application/json",
-                'X-CSRFToken': token
-            },
-            body: JSON.stringify(group)
-        };
-        const request = await fetch(createGroupUrl, options);
+        await this.api.createOrUpdate(createGroupUrl, group, "POST");
         displayMessage("You have created a new group");
         this.friendTilesDivDown.innerHTML = "";
         this.friendTilesDivUp.innerHTML = "";
@@ -119,7 +113,6 @@ export default class GroupManager{
                 return;
             }
             await this.createGroup();
-           
         })
     }
 }

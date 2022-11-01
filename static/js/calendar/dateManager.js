@@ -16,6 +16,11 @@ export default class DateManager{
             date.setDate(date.getDate() + value)
         });
     }
+    calcDateDifferance = (date1, date2) =>{
+        
+        return ((date1.getTime() - date2.getTime())/(1000 * 3600 * 24) + 1);
+
+    }
     formatDate = (date) => {
         return [
             (date.getDate()).toString().padStart(2, '0'),
@@ -23,7 +28,11 @@ export default class DateManager{
             date.getFullYear()
         ].join("-");
     }
-
+    createDateFromString = (dateString) => {
+        return new Date(
+            dateString.replace("-", ",")
+        );
+    }
     formatDatetime = (date) => {
         return [
             (date.getDate()).toString().padStart(2, '0'),

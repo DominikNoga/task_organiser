@@ -1,6 +1,14 @@
 {% extends 'task_organiser/main_template.html' %}
 {% load static %}
 {% block content %}
+<div id="taskFormContainer">
+    <div id="taskFormWrapper">
+        <button class="hideFormBtn">X</button>
+        <form class="addTask" id="addTask">
+            {% include 'task_organiser/taskForm.html' %}
+        </form>   
+    </div>
+</div>
     <br>
     <div class="mainPanelCal">
         <h3 class="plan-title-cal">
@@ -21,6 +29,17 @@
             </div> <div>Low importancy</div>
         </div>
         {% include 'task_organiser/popup.html' %}
+        <div class="sortingBar">
+            <label for="datePicker">Go to chosen date</label>
+            <input type="date" id="datePicker">
+            <label for="groupSelectCalendar">Choose tasks to display</label>
+            <select id="groupSelectCalendar">
+                <option value="all">All</option>
+                <option value="Just You">Just You</option>
+            </select>
+            <label for="addTaskBtn">Create new task</label>
+            <button id="addTaskBtn">Add new</button>
+        </div>
         <div class="rowContainer">
             <div class="buttons">
                 <button class="slider-btn" style="float:left;">-</button>
@@ -39,6 +58,7 @@
     </div>
 {% endblock %}
 {% block script %}
+    <script src="{% static 'js/home/addClassesHome.js' %}"></script>
     <script type="module" src="{% static 'js/calendar/calendar.js' %}"></script>
 {% endblock %}
 

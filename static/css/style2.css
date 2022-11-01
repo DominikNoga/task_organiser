@@ -74,11 +74,12 @@ nav div{
     gap: 3em;
 }
 .plan, .planCal{
+    grid-column: 1/3;
     padding: 1em;
     display: grid;
     column-gap: 1em;
     row-gap:1em;
-    grid-template-columns: auto auto;
+    grid-template-columns: auto auto auto;
 }
 .messages, .newFriends, .createGroupForm{
     min-height: 5em;
@@ -175,7 +176,7 @@ legend{
     background-color: rgb(235, 222, 222);
 }
 .plan-title, .plan-title-cal{
-    grid-column:1/3;
+    grid-column:1/4;
     background-color: rgba(255, 255, 255, 0.6);
     text-align: center;
     padding: 1em;
@@ -191,25 +192,17 @@ legend{
 }
 
 .addTask{
-    background-color: rgba(255, 255, 255, 0.427);
-    border: 1px solid black;
-    padding:1em 3em;
-    width: fit-content;
+    padding:1em 1em;
+    height: fit-content;
     margin-top: 2em;
     text-align: center;
     display:flex;
     flex-direction:column;
+    width: fit-content;
     gap:1em;
+    /* display: none; */
 
 }
-#task-form{
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    width: 100%;  
-}
-
 .form-par{
    display: grid;
    grid-template-columns: 50% 50%;
@@ -222,7 +215,7 @@ legend{
     width: 10%;
     float:left;
 }
-.btn-cancel, .btn-submit{
+.btn-cancel, .btn-submit, #addTaskBtn{
     background-color: rgb(255, 38, 38);
     font-weight: bold;
     color:white;
@@ -232,6 +225,11 @@ legend{
 }
 .btn-submit{
     background-color: rgb(15, 139, 15);
+}
+#addTaskBtn{
+    background-color: white;
+    color:black;
+    font-size:0.8em;
 }
 
 #footer {
@@ -308,14 +306,6 @@ button:hover{
 .planCal{
     grid-column:1/4;
 }
-.date-slider{
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    gap:2em;
-    grid-column: 1/4;
-    background-color: rgba(255, 255, 255, 0.601);
-}
 .low{
     background-color:rgba(0, 255, 21, 0.6);
 }
@@ -324,6 +314,16 @@ button:hover{
 }
 .high{
     background-color:rgba(255, 0, 0, 0.5);
+}
+.sortingBar{
+    grid-column: 1/4;
+    text-align: center;
+    background-color:rgb(36,32,33);
+    font-weight: 500;
+    padding: 0.5em 0;
+    width:100%;
+    color:white;
+    font-family:normal;
 }
 .btn-slider{
     background-color:rgb(36,32,33) ;
@@ -365,6 +365,7 @@ button:hover{
     position: fixed;
     left: 50%;
     top: 50%;
+    transform: translate(-50%, -50%);
     z-index: 10;
     color:white;
     width: 20%;
@@ -373,7 +374,7 @@ button:hover{
 .big{
     grid-column: 1/4;
 }
-.btn-task, .editTaskLink{
+.btn-task, .btn-edit, .hideFormBtn{
     position: relative;
     top:-2em;
     left:calc(100% - 1.5em);
@@ -390,12 +391,17 @@ button:hover{
     align-items:center;
     font-size: 0.8em;
 }
-.editTaskLink{
+.btn-edit{
     top:-2em;
     left:-1.5em;
 }
+.hideFormBtn{
+    background-color: red;
+    top:0;
+}
 .editTask{
-    width: 20%;
+    display: block;
+    width: 20% !important;
     margin:auto;
     margin-top: 2em;
     text-align: center;
@@ -403,6 +409,23 @@ button:hover{
     flex-direction:column;
     gap:1em;
     overflow-x:hidden;
+}
+#taskFormContainer{
+    position: fixed;
+    background-color: rgba(0, 0, 0, 0.678);
+    width: 100%;
+    height: calc(100vh + 6em);
+    z-index: 1;
+    display: none;
+    transform: translateY(-4em);
+}
+#taskFormWrapper{
+    position: fixed;
+    top:50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: fit-content;
+    background-color:rgba(255, 255, 255, 0.715);
 }
 #idHome{
     display: none;
