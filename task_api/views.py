@@ -154,3 +154,19 @@ def update_task(request, pk):
     
     task.users.set(users)
     return Response(serializer.data)
+
+
+@api_view(['GET'])
+def group_message_list(request):
+    group_messages = GroupMessage.objects.all()
+    serializer = GroupMessageSerializer(group_messages, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['POST'])
+def send_group_message(request):
+    serializer = GroupMessageSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+    
+    return Response(serializer.data)

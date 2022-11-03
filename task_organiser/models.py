@@ -17,6 +17,14 @@ class AppUser(models.Model):
         return self.username
 
 
+class FriendsGroup(models.Model):
+    members = models.ManyToManyField(AppUser)
+    group_name = models.CharField(max_length=40, null=True)
+    
+    def __str__(self):
+        return self.group_name
+
+
 class Message(models.Model):
     type_choices = [("reg", "regular"), 
         ("fr","friend_request"), 
@@ -34,14 +42,13 @@ class Message(models.Model):
     def __str__(self):
         return f"{self.sender} to {self.reciever} on: {self.date_sent} "
 
-
-class FriendsGroup(models.Model):
-    members = models.ManyToManyField(AppUser)
-    group_name = models.CharField(max_length=40, null=True)
-    
+class GroupMessage(models.Model):
+    sender = models.ForeignKey(User, on_delete=models.CASCADE)
+    reciever = models.ForeignKey(FriendsGroup, on_delete=models.CASCADE)
+    content = models.CharField(max_length=1000, null=True)
+    date_sent = models.DateTimeField(auto_now_add=True, null=True)
     def __str__(self):
-        return self.group_name
-
+        return f"{self.sender} to {self.reciever} on: {self.date_sent} "
 
 
 class Task(models.Model):
