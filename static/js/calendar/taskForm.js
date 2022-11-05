@@ -1,7 +1,7 @@
-import {displayMessage, getSelectValues} from "./functions.js";
-import GroupApi from "./api/groupApi.js";
-import AppUserApi from "./api/appUserApi.js";
-import TaskApi from "./api/taskApi.js";
+import {displayMessage, getSelectValues} from "../functions.js";
+import GroupApi from "../api/groupApi.js";
+import AppUserApi from "../api/appUserApi.js";
+import TaskApi from "../api/taskApi.js";
 export default class TaskForm{
     constructor(){
         this.groupApi = new GroupApi();

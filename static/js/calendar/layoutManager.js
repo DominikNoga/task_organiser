@@ -4,7 +4,7 @@ import Row from './row.js'
 import GroupApi from '../api/groupApi.js';
 import TaskApi from '../api/taskApi.js';
 import GroupManager from '../home/groups.js';
-import TaskForm from '../taskForm.js';
+import TaskForm from './taskForm.js';
 export default class LayoutManager {
     constructor(){
         this.NEXT = 1;

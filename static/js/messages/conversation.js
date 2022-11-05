@@ -39,7 +39,7 @@ export default class Conversation{
         if(requestButton === null)
             return;
         requestButton.addEventListener('click', async () => {
-            const id = Number(requestButton.id[requestButton.id.length - 1]);
+            const id = Number(requestButton.id.slice(10));
 
             id === this._userId ? this.friendRequestFromYou() : await this.friendRequestToYou(id);
         })

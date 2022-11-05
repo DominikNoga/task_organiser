@@ -2,13 +2,31 @@
 {% load static %}
 
 {% block head %}
-<link rel="stylesheet" href="{% static 'css/userProfile.css'">
+<link rel="stylesheet" href="{% static 'css/userProfile.css' %}" type="text/css">
 {% endblock %}
 
 {% block content %}
-    
+    <div class="mainContainer">
+        <div class="userInfo" id="userInfo">
+            
+        </div>
+        <div class="friends" id="friends">
+            <h2 class="title">Your friends</h2>
+            
+        </div>
+        <div class="groups">
+            <div class="group">
+                <div class="members">
+                    <div class="member">
+                        <img src="{% static 'img/zuzka.jpg'%}" alt="" class="profileImg">
+                        <small>Zuzka</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}
 
 {% block script %}
-<script type="module" src="{% static 'js/userProfile.js' %}"></script>
+<script type="module" src="{% static 'js/userProfile/userProfile.js' %}"></script>
 {% endblock %}
