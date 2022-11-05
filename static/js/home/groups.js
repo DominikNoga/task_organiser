@@ -1,23 +1,24 @@
 import { displayMessage } from "../functions.js";
 import Api from "../api/api.js";
+import GroupApi from "../api/groupApi.js";
+import AppUserApi from "../api/appUserApi.js";
 export default class GroupManager{
     constructor(){
         this.api = new Api();
+        this.groupApi = new GroupApi();
+        this.userApi = new AppUserApi();
         this.friendTilesDivUp = document.querySelectorAll(".friendTiles")[0];
         this.friendTilesDivDown = document.querySelectorAll(".friendTiles")[1];
         this.nameInput = document.querySelector(".createGroupForm input");
         this.namePar = document.querySelector(".groupName");
         this.currentGroup = [];
         this.currentUserId = Number(localStorage.getItem("currentUserId"));
-        this.groupListUrl = "http://127.0.0.1:8000/task_api/group_list/"
     }
     displayGroupTiles = async () =>{
-        const urlAllUsers = "http://127.0.0.1:8000/task_api/app_users_list/"
-        const urlCurrentUser = `http://127.0.0.1:8000/task_api/app_user_detail/${this.currentUserId}`
-        const currentUser = await this.api.read(urlCurrentUser)
+        const currentUser = await this.userApi.readDetail(this.currentUserId)
         const currentUserFriends = currentUser.friends;
 
-        const allUsers = await this.api.read(urlAllUsers)
+        const allUsers = await this.userApi.read();
         const allFriends = allUsers.filter(friend => 
             currentUserFriends.includes(friend.user)
         )
@@ -57,9 +58,7 @@ export default class GroupManager{
         );
         
         divToRemove.removeChild(childToRemove);
-        
-        const urlCurrentUser = `http://127.0.0.1:8000/task_api/app_user_detail/${id}`;
-        const friendToMove = await this.api.read(urlCurrentUser);
+        const friendToMove = await this.userApi.readDetail(id);
         divToFill.innerHTML += this.friendTileDiv(friendToMove, btnClass, btnText);
         dir === "down" ? this.currentGroup.push(friendToMove) :
             this.removeChosenElement(friendToMove);
@@ -85,11 +84,10 @@ export default class GroupManager{
         })
     }
     createGroup = async () => {
-        const createGroupUrl = "http://127.0.0.1:8000/task_api/create_group/";
         const members = this.currentGroup.map(user => user.user);
         members.push(this.currentUserId);
         const group = {group_name:this.nameInput.value, members: members}
-        await this.api.createOrUpdate(createGroupUrl, group, "POST");
+        await this.groupApi.create(group);
         displayMessage("You have created a new group");
         this.friendTilesDivDown.innerHTML = "";
         this.friendTilesDivUp.innerHTML = "";

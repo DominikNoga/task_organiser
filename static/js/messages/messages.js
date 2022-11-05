@@ -1,8 +1,10 @@
 import Conversation from "./conversation.js";
 import { displayTasks } from "./displayTasks.js";
-import Api from "../api/api.js";
+import TaskApi from "../api/taskApi.js";
+import AppUserApi from "../api/appUserApi.js";
 import MessageApi from "../api/messageApi.js";
-const api = new Api();
+const userApi = new AppUserApi();
+const taskApi = new TaskApi();
 const messageApi = new MessageApi();
 const currentUserId = Number(
     document.getElementById("currentId").innerHTML);
@@ -10,9 +12,6 @@ const sideConversations = document.getElementsByClassName('sideConversations')[0
 const sendBtn = document.getElementsByClassName('btn-submit')[0];
 const messageInput= document.getElementsByClassName('messageInput')[0];
 const commonTasks = document.getElementsByClassName('commonTasks')[0];
-const urlUsers = "http://127.0.0.1:8000/task_api/app_users_list/";
-const urlMessages = "http://127.0.0.1:8000/task_api/messages_list/";
-const urlTasks = "http://127.0.0.1:8000/task_api/task_list/";
 let currentFriendId = null;
 
 
@@ -30,7 +29,7 @@ const createUsersArray = async (messages) => {
             message.reciever : message.sender);
         idsSet.add(id);
     })
-    let users = await api.read(urlUsers);
+    let users = await userApi.read();
     users = users.filter(user => {
         for(let id of idsSet){
             if(user.user === id)
@@ -56,12 +55,12 @@ const displayMessages = async ()=>{
         currentFriendId, userMessages)
     conversation.setMessages();
     conversation.createConversationDiv();   
-    conversation.displayUserInfo(currentFriendId, await api.read(urlUsers));
+    conversation.displayUserInfo(currentFriendId, await userApi.read());
     conversation.handleFriendRequest();
 }
 const buildTasksDiv = async () =>{
     commonTasks.innerHTML = '<h4></h4>';
-    const tasksApi = await api.read(urlTasks);
+    const tasksApi = await taskApi.read();
     displayTasks(currentUserId, currentFriendId, tasksApi,
         commonTasks);
 }

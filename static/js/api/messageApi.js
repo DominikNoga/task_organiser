@@ -14,6 +14,9 @@ export default class MessageApi extends Api {
             reciever: reciever
         }
     }
+    async read (){
+        return super.read(this.messageListUrl);
+    }
     createFriendRequestMessage = (username, id) =>{
         return `
         Hi ${username}, do you want to be my friend on task_organiser?

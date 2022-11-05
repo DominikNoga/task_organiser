@@ -1,26 +1,29 @@
 import Task from './task.js';
 import DateManager from './dateManager.js';
 import Api from '../api/api.js';
+import GroupApi from '../api/groupApi.js';
+import AppUserApi from '../api/appUserApi.js';
 import GroupManager from '../home/groups.js';
 import TaskApi from '../api/taskApi.js';
 export default class TaskManager{
     constructor(){
         this.dm = new DateManager();
         this.gm = new GroupManager();
-        this.api = new Api();
+        this.groupApi = new GroupApi();
         this.taskApi = new TaskApi();
+        this.userApi = new AppUserApi();
     }
     createTaskArray = async () => {
         let taskArr = [];
         const currenUserId = Number(localStorage.getItem("currentUserId"));
         const userTasks = await this.taskApi.getUserTasks(currenUserId);
-        const users = await this.api.read("http://127.0.0.1:8000/task_api/users_list/");
-        const groups = await this.api.read("http://127.0.0.1:8000/task_api/group_list/");
+        const users = await this.userApi.read();
+        const groups = await this.groupApi.read();
         userTasks.forEach((task, i) => {
             const userIndexes = task.users;
             const usernames = users.map((user) => {
                 for(let id of userIndexes){
-                    if(user.id === id)
+                    if(user.user === id)
                         return user.username
                 }
             }).join(" ");

@@ -1,8 +1,12 @@
 import {displayMessage, getSelectValues} from "./functions.js";
 import GroupApi from "./api/groupApi.js";
+import AppUserApi from "./api/appUserApi.js";
+import TaskApi from "./api/taskApi.js";
 export default class TaskForm{
     constructor(){
-        this.api = new GroupApi();
+        this.groupApi = new GroupApi();
+        this.userApi = new AppUserApi();
+        this.taskApi = new TaskApi();
         this.name = document.getElementById("name");
         this.description = document.getElementById("description");
         this.status = document.getElementById("status");
@@ -13,13 +17,12 @@ export default class TaskForm{
         this.userSelectDiv = document.getElementById("userSelectTextDiv");
         this.form = document.getElementById("addTask");
         this.rangeValue = document.querySelector(".rangeValue");
-        this.groupUrl = "http://127.0.0.1:8000/task_api/group_list/";
         this.noGroupValue = "Just You";
         this.currentGroupName = this.noGroupValue;
         this._currentTaskId = -1;
     }
     fillGroupSelect = async () => {
-        const groups = await this.api.getCurrentUserGroups();
+        const groups = await this.groupApi.getCurrentUserGroups();
         groups.forEach(group => {
             this.groupSelect.innerHTML += `<option value="${group.group_name}">
     ${group.group_name}</option>`
@@ -29,8 +32,8 @@ export default class TaskForm{
         this.userSelectDiv.innerText = "";
         this.userSelect.style.display = "block";
         this.userSelect.innerHTML = "";
-        const groups = await this.api.read(this.groupUrl)
-        const users = await this.api.read("http://127.0.0.1:8000/task_api/app_users_list/")  
+        const groups = await this.groupApi.read();
+        const users = await this.userApi.read();
         const currentGroup = groups.find(group => 
             group.group_name === this.currentGroupName    
         );
@@ -59,10 +62,10 @@ export default class TaskForm{
         }
     }
     fillUserInput = async (task) =>{
-        const users = await this.api.read("http://127.0.0.1:8000/task_api/users_list/")
+        const users = await this.userApi.read();
         const matchingUsers = users.filter(user => 
-            task.users.includes(user.id))
-            .map(user => user.id);
+            task.users.includes(user.user))
+            .map(user => user.user);
         
         const options = document.querySelectorAll("#userSelect option")
         options.forEach(opt => {
@@ -71,34 +74,27 @@ export default class TaskForm{
         })
     }
     fillInputFields = async (taskId) =>{
-        const task = await this.api.read(`http://127.0.0.1:8000/task_api/task_detail/${taskId}`);
+        const task = await this.taskApi.readDetail(taskId);
         this.rangeValue.innerText = task.importancy;
         this.name.value = task.name;
         this.description.value = task.description;
         this.deadline.value = new Date(task.deadline).toISOString().slice(0,16);
         this.importancy.value = task.importancy;
         this.status.value = task.status;
-        this.currentGroupName = await this.api.getGroupName(task.group);
+        this.currentGroupName = await this.groupApi.getGroupName(task.group);
         this.groupSelect.value = this.currentGroupName;
         await this.fillUserSelect();
         if(this.currentGroupName !== this.noGroupValue)
             await this.fillUserInput(task);
     }
     createTask = async () => {
-        let url ="";
-        if (this._currentTaskId !== -1){ 
-            url=`http://127.0.0.1:8000/task_api/update_task/${this.currentTaskId}`
-        }
-        else  
-            url = "http://127.0.0.1:8000/task_api/create_task/";
-    
         let group = null;
-        const groups = await this.api.read(this.groupUrl);
+        const groups = await this.groupApi.read();
         const currentGroup = groups.find(g => g.group_name === this.currentGroupName);
         if (currentGroup !== undefined) {
             group = currentGroup.id;
         }
-        const users = await this.api.read("http://127.0.0.1:8000/task_api/app_users_list/");
+        const users = await this.userApi.read();
         const selectValue = getSelectValues(userSelect);
         let chosenUsers = users
         .filter(user => selectValue.includes(user.user.toString()))
@@ -108,7 +104,12 @@ export default class TaskForm{
             chosenUsers = [Number(localStorage.getItem("currentUserId"))];
         
         const task = this.getTask(group, chosenUsers);
-        await this.api.createOrUpdate(url, task, "POST")
+        
+        if(this.currentTaskId !== -1)
+            await this.taskApi.update(task, this.currentTaskId);
+        else
+            await this.taskApi.create(task);
+        
         displayMessage("You have successfully created a new task");
         this.form.reset();
         window.location.reload();

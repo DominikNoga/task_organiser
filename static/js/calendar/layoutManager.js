@@ -2,6 +2,7 @@ import DateManager from './dateManager.js'
 import TaskManager from './taskManager.js'
 import Row from './row.js'
 import GroupApi from '../api/groupApi.js';
+import TaskApi from '../api/taskApi.js';
 import GroupManager from '../home/groups.js';
 import TaskForm from '../taskForm.js';
 export default class LayoutManager {
@@ -12,7 +13,8 @@ export default class LayoutManager {
         this.tasks = []
         this.dm = new DateManager()
         this.rows = []
-        this.api = new GroupApi();
+        this.groupApi = new GroupApi();
+        this.taskApi = new TaskApi();
         this.rowDivs = document.getElementsByClassName('row')
         this.buttons = document.getElementsByClassName('slider-btn');
         this.popup = document.getElementsByClassName('popupMessage')[0];
@@ -73,7 +75,7 @@ export default class LayoutManager {
         this.dm.updateDateSlider();
     }
     fillGroupSelect = async () => {
-        const groups = await this.api.getCurrentUserGroups();
+        const groups = await this.groupApi.getCurrentUserGroups();
         groups.forEach(group => {
             this.groupSelect.innerHTML += `<option value="${group.group_name}">
     ${group.group_name}</option>`
@@ -137,7 +139,6 @@ export default class LayoutManager {
     }
     deleteTask = async (id) =>{
         const task = this.tasks.find(t => t.db_id === id);
-        const url = `http://127.0.0.1:8000/task_api/task_delete/${task.db_id}`;      
         for(let t of this.tasks){
             if(t.db_id === id){
                 t.toBeDeleted = true;
@@ -146,6 +147,6 @@ export default class LayoutManager {
         }
         this.tasks.sort((t1, t2) => Number(t1.toBeDeleted) - Number(t2.toBeDeleted));
         this.tasks.pop();
-        await this.api.delete(url);
+        await this.taskApi.delete(task.db_id);
     }
 }   

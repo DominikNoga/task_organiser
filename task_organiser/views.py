@@ -97,3 +97,8 @@ def edit_task(request, task_id):
 
     context = {'task': task, "form": form, "importancy": importancy}
     return render(request, 'task_organiser/editTask.html', context)
+
+
+@login_required(login_url='login')
+def user_profile(request):
+    return render(request, 'task_organiser/userProfile.html')

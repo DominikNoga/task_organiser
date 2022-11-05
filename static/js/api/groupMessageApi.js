@@ -1,12 +1,14 @@
 import Api from "./api.js";
 
-export default class MessageApi extends Api {
+export default class GroupMessageApi extends Api {
     constructor(){
         super();
-        this.messageListUrl = "http://127.0.0.1:8000/task_api/group_messages_list/";
-        
+        this.messageListUrl = "http://127.0.0.1:8000/task_api/group_message_list/";
     }
-    createMessage = (sender, reciever, content,type) =>{
+    async read(){
+        return super.read(this.messageListUrl);
+    }
+    createMessage = (sender, reciever, content) =>{
         return {
             content: content,
             type: type,
@@ -14,25 +16,13 @@ export default class MessageApi extends Api {
             reciever: reciever
         }
     }
-    createFriendRequestMessage = (username, id) =>{
-        return `
-        Hi ${username}, do you want to be my friend on task_organiser?
-        <div class="buttonsRequest">
-            <button class="btn-accept" id="btn-accept${id}">accept</button>
-            <button class="btn-reject">rejcet</button>
-        </div>
-    `
-    }
     sendMessage = async (sender, reciever, content, type) =>{
-        const url = "http://127.0.0.1:8000/task_api/send_message/"
+        const url = "http://127.0.0.1:8000/task_api/send_group_message/"
         const message = this.createMessage(sender, reciever, content, type)
         await this.createOrUpdate(url,message, "POST")
     }
-    getUserMessages = async (currentUserId) => {
+    getGroupMessages = async (groupId) => {
         const messages = await this.read(this.messageListUrl);
-        return messages.filter(message => 
-            (message.reciever === currentUserId || 
-                message.sender === currentUserId)
-        )
+        return messages.filter(message => message.reciever === groupId)
     }
 }

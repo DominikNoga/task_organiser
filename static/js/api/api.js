@@ -1,6 +1,6 @@
 import { csrftoken } from "../messages/token.js";
 export default class Api {
-    delete = async (url) => {
+    async delete (url){
         const options = {
             method: "DELETE",
             headers:{
@@ -10,7 +10,7 @@ export default class Api {
         }
         await fetch(url, options);
     }
-    createOrUpdate = async (url, object, method) => {
+    async createOrUpdate(url, object, method){
         const options = {
             method: method,
             headers:{
@@ -21,10 +21,13 @@ export default class Api {
         };
         await fetch(url, options);
     }
-    read = async (url) => {
+    async read (url){
         const api = await fetch(url);
         const apiJson = await api.json();
         return apiJson;
+    }
+    async readDetail(url, id){
+        return this.read(url + id);
     }
     
 }

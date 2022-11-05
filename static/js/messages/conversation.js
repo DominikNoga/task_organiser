@@ -1,8 +1,8 @@
-import Api from "../api/api.js";
+import AppUserApi from "../api/appUserApi.js";
 import { displayMessage } from "../functions.js";
 export default class Conversation{
     constructor(currentUserId,otherUserId, messages){
-        this.api = new Api();
+        this.api = new AppUserApi();
         this._userId = currentUserId;
         this._otherUserId = otherUserId;
         this._messages = messages;
@@ -19,9 +19,7 @@ export default class Conversation{
         return this._messages;
     }
     friendRequestToYou = async (id) => {
-        const urlUpdate = `http://127.0.0.1:8000/task_api/update_app_user/${this._userId}`;
-        const urlDetail = `http://127.0.0.1:8000/task_api/app_user_detail/${this._userId}`;
-        const appUser = await this.api.read(urlDetail);
+        const appUser = await this.api.readDetail(id);
         let popupMessage = "You have successfully added a new friend";
         if(appUser.friends.includes(id)){
             popupMessage = "You have already added this friend";
@@ -29,8 +27,7 @@ export default class Conversation{
             return;
         }
         appUser.friends.push(id);
-        this.api.createOrUpdate(urlUpdate, {friends: appUser.friends},
-            "POST")
+        this.api.update({friends: appUser.friends},id);
         displayMessage(popupMessage);
         
     }

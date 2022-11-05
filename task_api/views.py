@@ -138,6 +138,13 @@ def update_group(request, pk):
     return Response(serializer.data)
 
 
+@api_view(["DELETE"])
+def delete_group(request, pk):
+    group = FriendsGroup.objects.get(id=pk)
+    group.delete()
+    return Response()
+
+
 @api_view(["POST"])
 def update_task(request, pk):
     task = Task.objects.get(id=pk)

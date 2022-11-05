@@ -2,7 +2,9 @@ import {displayMessage} from '../functions.js';
 import GroupManager from "./groups.js";
 import Api from '../api/api.js';
 import MessageApi from '../api/messageApi.js';
+import AppUserApi from '../api/appUserApi.js';
 const api = new Api();
+const userApi = new AppUserApi();
 const messageApi = new MessageApi();
 const input = document.querySelectorAll(".addFriendForm input")[0];
 const users_list = document.querySelector(".users_list");
@@ -13,8 +15,7 @@ let current_index = null;
 let username = "";
 const gm = new GroupManager();
 const getNotFriends = async () =>{
-    const app_users_url = "http://127.0.0.1:8000/task_api/app_users_list/";
-    let users = await api.read(app_users_url)
+    let users = await userApi.read()
     const currentUser = users.find(user => user.user === currentUserId);
     const friends = currentUser.friends;
     return users.filter(user => {
