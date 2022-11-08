@@ -111,6 +111,12 @@ def group_list(request):
     serializer = FriendsGroupSerializer(groups, many=True)
     return Response(serializer.data)
 
+@api_view(["GET"])
+def group_detail(request, id):
+    group = FriendsGroup.objects.get(id=id)
+    serializer = FriendsGroupSerializer(group, many=False)
+    return Response(serializer.data)
+
 
 @api_view(["POST"])
 def create_group(request):

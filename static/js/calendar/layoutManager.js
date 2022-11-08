@@ -124,7 +124,6 @@ export default class LayoutManager {
             });
         }
     }
-
     waitForPopup = () =>{
         return new Promise((resolve, reject) =>{        
             this.subBtn.addEventListener('click', () =>{

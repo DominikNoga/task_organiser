@@ -1,13 +1,19 @@
 import Api from "./api.js";
-
+import AppUserApi from "./appUserApi.js"
+const appUserApi = new AppUserApi();
 export default class GroupApi extends Api {
     constructor(){
         super();
         this.groupListUrl = "http://127.0.0.1:8000/task_api/group_list/"
         this.createGroupUrl = "http://127.0.0.1:8000/task_api/create_group/";
+        this.updateUrl = "http://127.0.0.1:8000/task_api/group_detail/";
+        
     }
     async read() {
         return super.read(this.groupListUrl);
+    }
+    async readDetail(id){
+        return super.read(this.updateUrl + id);
     }
     async create (group){
         await super.createOrUpdate(this.createGroupUrl, group, "POST");
@@ -16,13 +22,9 @@ export default class GroupApi extends Api {
         const url = `http://127.0.0.1:8000/task_api/update_group/${id}`;
         await super.createOrUpdate(url, group, "PUT");
     }
-    getCurrentUserGroups = async () => {
+    getUserGroups = async (id) => {
         const groups = await this.read(this.groupListUrl);
-        return groups.filter(group => 
-            group.members.includes(
-                Number(localStorage.getItem("currentUserId"))
-            )
-        );
+        return groups.filter(group => group.members.includes(id));
     }
     getGroupId = async (name) =>{
         const groups = await this.read(this.groupListUrl);
@@ -35,6 +37,13 @@ export default class GroupApi extends Api {
             return currentGroup.group_name;
         
         return "Just You";
+    }
+    getGroupMembers = async (groupId) => {
+        const group = await this.readDetail(groupId);
+        const groupPromises = group.members.map(async member => 
+            await appUserApi.readDetail(member)
+        );
+        return Promise.all(groupPromises);
     }
     async delete(id){
         const url = "http://127.0.0.1:8000/task_api/delete_group/" + id;

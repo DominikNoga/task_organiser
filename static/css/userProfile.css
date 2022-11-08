@@ -6,7 +6,8 @@ body{
 .mainContainer{
     display: grid;
     width: 100%;
-    grid-template-columns: 20%, 50%;
+    grid-template-columns: auto, auto;
+    margin-bottom: 2em;
 }
 .userInfo{
     background-color: #fff;
@@ -27,40 +28,57 @@ body{
 }
 .friendLink:hover{
     opacity: 0.9;
+    cursor:pointer;
 }
 .friends{
     border: 2px solid black;
-    display: grid;
-    grid-template-columns: auto auto auto;
     padding:0.5em;
+    display:grid;
+    grid-template-columns:  repeat(3,1fr);
     gap:1em;
-    min-width: 20%;
     background-color: white;
-    max-width: 50%;
     margin-left: 1em;
-}
-.friend{
-    width: fit-content;
+    min-width: 20em;
+    max-width: min-content;
+    height:min-content;
 }
 .friendImage{
-    max-width: 6em;
-    max-height: 6em;
+    width: 6em; 
 }
 .title{
-    grid-column: 1/4;
+    grid-column:1/4;
     margin:auto;
 }
 .groups{
-    border:2px solid green;
     display: flex;
     flex-direction: column;
     padding: 1em;
+    width: calc(fit-content + 3em);
 }
 .group{
     width: 90%;
     margin-left: 5%;
 }
+.groupName{
+    margin: 1em 0 ;
+}
+.groupNameEditBtn{
+    background-color: inherit;
+    border:none;
+}
+.members{
+    display:flex;
+    flex-direction:column;
+    gap:0.5em;
+}
 .member{
     background-color: #fff;
     border-radius:1em;
+    display:flex;
+    align-items:space-between;
+    justify-content:space-between;
+}
+
+button:hover{
+    cursor: pointer;
 }

@@ -436,3 +436,10 @@ button:hover{
     height: 2em;
     border:rgba(0, 0, 0, 0.545) solid 1px;
 }
+.timer{
+    position: absolute;
+    top:0;
+    left:0.5em;
+    color:white;
+    font-size: 1.1em;
+}
