@@ -22,10 +22,16 @@ export const displayAcceptMessage = (text) => {
   body.appendChild(div);
   const interval = setInterval(() => {
       const timerDiv = document.querySelector(".timer")
-      timeLeft -=1;
-      timerDiv.innerText = timeLeft;
+      if(timerDiv === null){
+          clearTimeout(timeout);
+          clearInterval(interval);
+      }
+      else{
+          timeLeft -=1;
+          timerDiv.innerText = timeLeft;
+      }
   }, 1000);
-  setTimeout(()=>{
+  const timeout = setTimeout(()=>{
       body.removeChild(div);
       clearInterval(interval);
   }, timeLeft*1000);

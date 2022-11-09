@@ -82,3 +82,11 @@ body{
 button:hover{
     cursor: pointer;
 }
+@media screen and (max-width: 768px){
+    .friendImage{
+        width:3em;
+    }
+    .friends{
+        min-width:11em;
+    }
+}

@@ -45,6 +45,12 @@ export default class GroupApi extends Api {
         );
         return Promise.all(groupPromises);
     }
+    removeGroupMember = async (groupId, memberId) => {
+        const group = await this.readDetail(groupId);
+        const index = group.members.indexOf(memberId);
+        group.members.splice(index, 1);
+        await this.update(group, group.id)
+    }
     async delete(id){
         const url = "http://127.0.0.1:8000/task_api/delete_group/" + id;
         await super.delete(url);
