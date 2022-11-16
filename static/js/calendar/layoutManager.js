@@ -42,7 +42,10 @@ export default class LayoutManager {
     hideFormListener = () =>{
         this.hideFromBtn = document.querySelector(".hideFormBtn");
         this.hideFromBtn.addEventListener("click", () =>{
-            this.formContainer.style.display = "none";
+            this.handleFormAnimation("form-hidden", "form-active");
+            setTimeout(() =>{
+                this.formContainer.style.display = "none";
+            },800)
         });
     }
     init = () =>{
@@ -51,6 +54,7 @@ export default class LayoutManager {
         this.addTaskBtn.addEventListener("click", () =>{
             this.formContainer.style.display = "block";
             this.hideFormListener();
+            this.handleFormAnimation("form-active", "form-hidden");
             this.taskForm.form.reset();
             this.taskForm.rangeValue.value = 1;
         })
@@ -75,7 +79,8 @@ export default class LayoutManager {
         this.dm.updateDateSlider();
     }
     fillGroupSelect = async () => {
-        const groups = await this.groupApi.getCurrentUserGroups();
+        const currentUserId = Number(localStorage.getItem("currentUserId"));
+        const groups = await this.groupApi.getUserGroups(currentUserId);
         groups.forEach(group => {
             this.groupSelect.innerHTML += `<option value="${group.group_name}">
     ${group.group_name}</option>`
@@ -147,5 +152,9 @@ export default class LayoutManager {
         this.tasks.sort((t1, t2) => Number(t1.toBeDeleted) - Number(t2.toBeDeleted));
         this.tasks.pop();
         await this.taskApi.delete(task.db_id);
+    }
+    handleFormAnimation = (className, classToRemove) =>{
+        this.taskForm.wrapper.classList.add(className);
+        this.taskForm.wrapper.classList.remove(classToRemove);
     }
 }   

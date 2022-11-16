@@ -443,3 +443,29 @@ button:hover{
     color:white;
     font-size: 1.1em;
 }
+.form-active{
+    animation: show-task-form .7s ease-out both;
+}
+.form-hidden{
+    animation: hide-task-form .7s ease-out both;
+}
+@keyframes show-task-form{
+    from{
+        transform: translate(-50%, -80%);
+        opacity: 0;
+    }
+    to{
+        transform: translate(-50%, -50%);
+        opacity: 1;
+    }
+}
+@keyframes hide-task-form{
+    from{
+        transform: translate(-50%, -50%);
+        opacity: 1;
+    }
+    to{
+        transform: translate(-50%, -80%);
+        opacity: 0;
+    }
+}

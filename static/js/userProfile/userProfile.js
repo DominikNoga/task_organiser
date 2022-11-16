@@ -16,7 +16,7 @@ class LayoutManager{
         this.userInfo.innerHTML = `<div class="userImgDiv">
             <img src="static/img${user.profile_pic}" alt="" class="bigUserImage">
             <div class="editImage">
-                <button><i class="fa-solid fa-camera"></i></button>
+                <input type="file" placeholder="change profile pic"/> <i class="fa-solid fa-camera"></i>
             </div>
         </div>
         <h2 id="username">${user.username}</h2>`
@@ -38,10 +38,10 @@ class LayoutManager{
     </div>
     `
     }
-    basicGroupName = (groupName, groupId) => `<div class="groupName">
-    <strong>${groupName}</strong> <button class="groupNameEditBtn" title="Edit group"
-    id="groupNameEditBtn${groupId}"><i class="fa-solid fa-pen-to-square"></i></button>
-</div>`
+    basicGroupName = (groupName, groupId) => `<strong>${groupName}</strong> 
+    <button class="groupNameEditBtn" title="Edit group" id="groupNameEditBtn${groupId}">
+        <i class="fa-solid fa-pen-to-square"></i>Edit
+    </button>`
     buildMembersDiv = (members, groupId) => {
         return members.reduce((total,member)=> 
             total += this.memberDiv(member, groupId) 
@@ -49,7 +49,9 @@ class LayoutManager{
     }
     groupDiv = (group, members) =>{
         return `<div class="group" id="group${group.id}">
-    ${this.basicGroupName(group.group_name, group.id)}
+    <div class="groupName">
+        ${this.basicGroupName(group.group_name, group.id)}
+    </div>
     <div class="members">
         ${this.buildMembersDiv(members, group.id)}
     </div>
@@ -73,20 +75,22 @@ class LayoutManager{
                 btn.style.visibility = visibility;
         })
     }
-    editName = (groupNames, groupNamesValues, btn, index) => {
+    editMode = (groupNames, groupNamesValues, btn, index) => {
+        let groupName = groupNamesValues[index].innerText;
         const groupId = Number(btn.id.slice(16));
         this.currentGroupId = groupId;
-        let groupName = groupNamesValues[index].innerText;
         groupNames[index].innerHTML = `<input type="text" value="${groupName}"/> 
         <button type="button" class="btn-submit" id="changeNameBtn${groupId}">save</button>`;
         const saveBtn = document.querySelector(`#changeNameBtn${groupId}`);
         saveBtn.addEventListener("click", ()  => {
+            const btnId = Number(saveBtn.id.slice(13));
+            this.currentGroupId = btnId;
             const nameInput = document.querySelector(".groupName input");
             groupName = nameInput.value;
-            this.changeGroupName(groupName, groupId);
             groupNames[index].innerHTML = this.basicGroupName(groupName, groupId);
             this.addEditGroupEvents();
             this.changeRemoveBtnsVisibility();
+            this.changeGroupName(groupName, groupId);
         });
     }
     addEditGroupEvents = () =>{
@@ -95,7 +99,7 @@ class LayoutManager{
         const groupNamesValues = document.querySelectorAll(".groupName strong");
         editBtns.forEach((btn, index) =>{
             btn.addEventListener("click", async () =>{
-                this.editName(groupNames, groupNamesValues, btn, index);
+                this.editMode(groupNames, groupNamesValues,btn, index);
                 this.changeRemoveBtnsVisibility("visible");
             });
         });

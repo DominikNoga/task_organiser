@@ -20,9 +20,11 @@ export default class TaskForm{
         this.noGroupValue = "Just You";
         this.currentGroupName = this.noGroupValue;
         this._currentTaskId = -1;
+        this.wrapper = document.querySelector("#taskFormWrapper");
     }
     fillGroupSelect = async () => {
-        const groups = await this.groupApi.getCurrentUserGroups();
+        const currentUserId = Number(localStorage.getItem("currentUserId"));
+        const groups = await this.groupApi.getUserGroups(currentUserId);
         groups.forEach(group => {
             this.groupSelect.innerHTML += `<option value="${group.group_name}">
     ${group.group_name}</option>`
