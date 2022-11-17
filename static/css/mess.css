@@ -14,13 +14,13 @@ body{
     display: flex;
     flex-direction: column;
 }
-.conversationTile{
+.conversationTile, .groupConversationTile{
     border-bottom: 1px dotted black;
     padding: 0.5em 0;
     display: flex;
     flex-direction: row;
 }
-.conversationTile:hover{
+.conversationTile:hover, .groupConversationTile:hover{
     background-color: rgb(235, 222, 222);
     cursor:pointer;
 }

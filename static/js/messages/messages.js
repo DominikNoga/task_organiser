@@ -3,8 +3,14 @@ import { displayTasks } from "./displayTasks.js";
 import TaskApi from "../api/taskApi.js";
 import AppUserApi from "../api/appUserApi.js";
 import MessageApi from "../api/messageApi.js";
+import GroupMessageApi from "../api/groupMessageApi.js";
+import GroupApi from "../api/groupApi.js";
+import GroupConversation from "./groupConversation.js";
+let groupMode = false;
 const userApi = new AppUserApi();
 const taskApi = new TaskApi();
+const groupMessageApi = new GroupMessageApi();
+const groupApi = new GroupApi();
 const messageApi = new MessageApi();
 const currentUserId = Number(
     document.getElementById("currentId").innerHTML);
@@ -13,7 +19,7 @@ const sendBtn = document.getElementsByClassName('btn-submit')[0];
 const messageInput= document.getElementsByClassName('messageInput')[0];
 const commonTasks = document.getElementsByClassName('commonTasks')[0];
 let currentFriendId = null;
-
+let currentGroupId = null;
 
 const getCurrentFriendId = async () => {
     const userMessages = await messageApi.getUserMessages(currentUserId);
@@ -30,13 +36,7 @@ const createUsersArray = async (messages) => {
         idsSet.add(id);
     })
     let users = await userApi.read();
-    users = users.filter(user => {
-        for(let id of idsSet){
-            if(user.user === id)
-                return true;
-        }
-        return false;
-    })
+    users = users.filter(user => idsSet.has(user.user))
     return users;
 }
 const ConversationTile = (user, messages) =>{
@@ -44,6 +44,15 @@ const ConversationTile = (user, messages) =>{
     <img src="static/img${user.profile_pic}" alt="" class="profileImg">
     <div>
         ${user.username}
+        <br/>
+        <small>${messages[messages.length-1].content}</small>
+    </div>
+</div>`
+}
+const groupConversationTile = (group, messages) =>{
+    return `<div class="groupConversationTile">
+    <div>
+        ${group.group_name}
         <br/>
         <small>${messages[messages.length-1].content}</small>
     </div>
@@ -58,17 +67,51 @@ const displayMessages = async ()=>{
     conversation.displayUserInfo(currentFriendId, await userApi.read());
     conversation.handleFriendRequest();
 }
+const displayGroupMessages = async ()=>{
+    const groups = await groupApi.read();
+    const messages = await groupMessageApi.getGroupMessages(currentGroupId)
+    const conversation = new GroupConversation(currentUserId,
+        messages,currentGroupId)
+    conversation.createConversationDiv();   
+    conversation.displayGroupInfo(groups);
+}
 const buildTasksDiv = async () =>{
     commonTasks.innerHTML = '<h4></h4>';
     const tasksApi = await taskApi.read();
     displayTasks(currentUserId, currentFriendId, tasksApi,
         commonTasks);
 }
+const displayGroupTiles = async () =>{
+    const userGroups = await groupApi.getUserGroups(currentUserId)
+    const allMessages = await groupMessageApi.read();
+    const nonEmpty = userGroups.filter(group => {
+        for(let mess of allMessages) {
+            if(mess.reciever === group.id)
+                return true;
+        }
+        return false;
+    });
+    const groupConversations = [];
+    for(let group of nonEmpty){
+        const groupMessages = await groupMessageApi.getGroupMessages(group.id);
+        groupConversations.push(
+            new GroupConversation(currentUserId, groupMessages, group.id)
+        )
+    }
+    groupConversations.forEach((conversation, i) => {
+        sideConversations.innerHTML += groupConversationTile(
+            nonEmpty[i] , conversation.messages
+        )
+    })
+    const ids = nonEmpty.map((group) => group.id);
+    return ids;
+
+}
 const displayConversationTiles = async () =>{
-    sideConversations.innerHTML = ''
+    sideConversations.innerHTML = '';
     const userMessages = await messageApi.getUserMessages(currentUserId);
     const userArray = await createUsersArray(userMessages)
-    let conversations = [];
+    const conversations = [];
     userArray.forEach(user => {
         conversations.push(new Conversation(currentUserId,
             user.user, userMessages));
@@ -80,26 +123,52 @@ const displayConversationTiles = async () =>{
         )
     })
     const ids = userArray.map((user) => user.user);
-    addTileEvents(ids);
+    return ids;
 }
 const buildLayout = async () => {
     await buildTasksDiv();
-    await displayMessages();
-    await displayConversationTiles()
+    if(groupMode)
+        await displayGroupMessages();
+    else
+        await displayMessages();
+    await displayConversationTiles();
+    const frinedsIds = await displayConversationTiles();
+    const groupIds = await displayGroupTiles();
+    await addTileEvents(frinedsIds);
+    await addGroupTileEvents(groupIds);
 }
-const addTileEvents = (ids) => {
-    const tiles = document.getElementsByClassName('conversationTile');
+const friendTileEvent = async (id) =>{
+    currentFriendId = id;
+    await buildTasksDiv();
+    await displayMessages();
+    groupMode = false;
+}
+const addTileEvents = async (ids) => {
+    const tiles = document.querySelectorAll('.conversationTile');
     for(let i = 0; i < tiles.length; i++) {
         tiles[i].addEventListener('click', async () => {
-            currentFriendId = ids[i];
-            await buildTasksDiv();
-            await displayMessages();
+            await friendTileEvent(ids[i]);
+        });
+    }
+}
+const groupTileEvent = async (id) => {
+    currentGroupId = id;
+    await displayGroupMessages();
+    groupMode = true;
+}
+const addGroupTileEvents = async (ids) =>{
+    const tiles = document.querySelectorAll('.groupConversationTile');
+    for(let i = 0; i < tiles.length; i++) {
+        tiles[i].addEventListener('click', async () => {
+            await groupTileEvent(ids[i])
         });
     }
 }
 sendBtn.addEventListener('click', async () => {
-    await messageApi.sendMessage(currentUserId, currentFriendId, 
-        messageInput.value ,"reg");
+    if(groupMode)
+        await groupMessageApi.sendMessage(currentUserId,currentGroupId, messageInput.value);
+    else
+        await messageApi.sendMessage(currentUserId, currentFriendId, messageInput.value ,"reg");
     await buildLayout();
     messageInput.value = '';
 })

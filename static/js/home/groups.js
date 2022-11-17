@@ -28,8 +28,8 @@ export default class GroupManager{
         });
     }
 
-    friendTileDiv = (friend, btnClass, btnText) =>{
-        return `<div class="friendTile" id="friendTile${friend.user}">
+    friendTileDiv = (friend, btnClass, btnText, animationClass) =>{
+        return `<div class="friendTile ${animationClass}" id="friendTile${friend.user}">
     <img src="static/img${friend.profile_pic}" alt="" class="profileImg"/>
     ${friend.username} 
     <button class="${btnClass}" id="btnGroup${friend.user}">${btnText}</button>
@@ -44,29 +44,33 @@ export default class GroupManager{
         let divToRemove = this.friendTilesDivUp;
         let divToFill = this.friendTilesDivDown;
         let btnClass = "btn-cancel";
+        let animationClass = "tile-down";
         let btnText = "Cancel";
         if(dir === "up"){
             divToRemove = this.friendTilesDivDown;
             divToFill = this.friendTilesDivUp;
             btnClass = "btn-submit";
+            animationClass = "tile-up";
             btnText = "Add";
         }
         const children = Array.from(divToRemove.childNodes).
         filter(child => child.nodeName === "DIV" );
         const childToRemove = children.find(child => 
-           Number(child.id[child.id.length - 1]) === id
+           Number(child.id.slice(10)) === id
         );
         
-        divToRemove.removeChild(childToRemove);
+        setTimeout(() =>{
+            divToRemove.removeChild(childToRemove);
+        },700)
         const friendToMove = await this.userApi.readDetail(id);
-        divToFill.innerHTML += this.friendTileDiv(friendToMove, btnClass, btnText);
+        divToFill.innerHTML += this.friendTileDiv(friendToMove, btnClass, btnText, animationClass);
         dir === "down" ? this.currentGroup.push(friendToMove) :
             this.removeChosenElement(friendToMove);
     } 
     initAddButtons = () =>{
        this.addButtons = document.querySelectorAll(".friendTile .btn-submit");
        for(let button of this.addButtons){
-            let id = button.id[button.id.length - 1]
+            let id = button.id.slice(8);
             button.addEventListener("click", async () =>{
                 await this.replaceFriendTile(Number(id), "down");
                 this.initCancelButtons();
@@ -76,7 +80,7 @@ export default class GroupManager{
     initCancelButtons = () => {
         const cancelBtns = document.querySelectorAll(".friendTile .btn-cancel");
         cancelBtns.forEach(btn =>{
-            let id = btn.id[btn.id.length - 1]
+            let id = btn.id.slice(8);
             btn.addEventListener("click", async () =>{
                 await this.replaceFriendTile(Number(id), "up");
                 this.initAddButtons();

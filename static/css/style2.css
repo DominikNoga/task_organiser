@@ -337,6 +337,7 @@ button:hover{
     grid-template-columns: 30% 30% 30%;
     column-gap: 1em;
     justify-content: center;
+    position: relative;
 }
 .buttons{
     grid-column: 1/4;
@@ -443,12 +444,20 @@ button:hover{
     color:white;
     font-size: 1.1em;
 }
+/* Animated elements */
 .form-active{
     animation: show-task-form .7s ease-out both;
 }
 .form-hidden{
     animation: hide-task-form .7s ease-out both;
 }
+.tile-up{
+    animation:move-friend-tile-up .7s ease-out;
+}
+.tile-down{
+    animation: move-friend-tile-down .7s ease-out;
+}
+/* Animations */
 @keyframes show-task-form{
     from{
         transform: translate(-50%, -80%);
@@ -467,5 +476,25 @@ button:hover{
     to{
         transform: translate(-50%, -80%);
         opacity: 0;
+    }
+}
+@keyframes move-friend-tile-up{
+    from{
+        transform: translateY(0);
+        opacity: 1;
+    }
+    to{
+        transform: translateY(-30%);
+        opacity: 0;
+    }
+}
+@keyframes move-friend-tile-down{
+    from{
+        transform: translateY(-50%);
+        opacity: 0;
+    }
+    to{
+        transform: translateY(30%);
+        opacity: 1;
     }
 }

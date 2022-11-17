@@ -15,7 +15,7 @@ export default class LayoutManager {
         this.rows = []
         this.groupApi = new GroupApi();
         this.taskApi = new TaskApi();
-        this.rowDivs = document.getElementsByClassName('row')
+        this.rowDivs = document.querySelectorAll('.row')
         this.buttons = document.getElementsByClassName('slider-btn');
         this.popup = document.getElementsByClassName('popupMessage')[0];
         this.subBtn = document.getElementById("popupSubmit")
@@ -67,11 +67,10 @@ export default class LayoutManager {
         this.datePicker.addEventListener('change', () =>{
             const datePickerValue = this.dm.
             createDateFromString(this.datePicker.value)
-            this.updateRows(
-                this.dm.calcDateDifferance(
-                    datePickerValue, this.dm.dateArr[1]
-                )
+            const dateDifferance = this.dm.calcDateDifferance(
+                datePickerValue, this.dm.dateArr[1]
             );
+            this.updateRows(dateDifferance);
         });
         this.groupSelect.addEventListener("change", async () => {
             this.buildLayout(this.groupSelect.value);
@@ -123,6 +122,7 @@ export default class LayoutManager {
             btn.addEventListener('click', async () => {
                 let id = Number(btn.id.slice(8));
                 this.formContainer.style.display = "block";
+                this.handleFormAnimation("form-active", "form-hidden");
                 this.hideFormListener();
                 this.taskForm.currentTaskId = id;
                 this.taskForm.fillInputFields(id);

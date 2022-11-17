@@ -11,18 +11,23 @@ export default class GroupMessageApi extends Api {
     createMessage = (sender, reciever, content) =>{
         return {
             content: content,
-            type: type,
             sender: sender,
             reciever: reciever
         }
     }
-    sendMessage = async (sender, reciever, content, type) =>{
+    sendMessage = async (sender, reciever, content) =>{
         const url = "http://127.0.0.1:8000/task_api/send_group_message/"
-        const message = this.createMessage(sender, reciever, content, type)
+        const message = this.createMessage(sender, reciever, content)
         await this.createOrUpdate(url,message, "POST")
     }
     getGroupMessages = async (groupId) => {
-        const messages = await this.read(this.messageListUrl);
-        return messages.filter(message => message.reciever === groupId)
+        const messages = await this.read();
+        const mess = messages.filter(message => message.reciever === groupId);
+        return mess
+    }
+    getUserMessages = async (userId) => {
+        const messages = await this.read();
+        const mess = messages.filter(message => message.sender === userId);
+        return mess;
     }
 }

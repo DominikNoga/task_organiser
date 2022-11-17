@@ -49,12 +49,7 @@ export default class Conversation{
     ${message.content}
 </div>`
     }
-    disableButtons = () =>{
-        const buttons = document.querySelectorAll("currentMessages button");
-        for(let btn of buttons){
-            btn.disabled = true;
-        }
-    }
+    
     fillInfoDiv = (user) =>{
         this.infoDiv.innerHTML = `<img src="static/img${user.profile_pic}" alt="" class="profileImg">
 ${user.username}`
