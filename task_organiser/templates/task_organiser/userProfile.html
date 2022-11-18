@@ -6,16 +6,33 @@
 {% endblock %}
 
 {% block content %}
+<div id="friendFormContainer">
+    <div id="friendFormWrapper">
+        <button onclick="hideForm()" class="hideFormBtn">X</button>
+    </div>
+</div>
     <div class="mainContainer">
         <div class="userInfo">
-            
+            <div class="editImage">
+                <form action="" method="post" class="editImageForm" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="editImageForm__fields">
+                        {{form.profile_pic}}
+                    </div>
+                    <button type="submit" class="btn-submit img-btn">save</button>
+                    <i class="fa-solid fa-camera" title="edit profile image"></i>
+                    
+                </form>
+            </div>
         </div>
         <div class="friends">
-            <h2 class="title">Your friends</h2>            
+            <h2 class="title">Your friends 
+                <i onclick="showForm()"id="editFriendsBtn" title="edit your friends" class="fa-solid fa-pen-to-square"></i>
+            </h2>
+            
         </div>
         <div class="groups">
-            <h2>Group manager</h2>
-            
+            <h2>Group manager</h2> 
         </div>
     </div>
 {% endblock %}

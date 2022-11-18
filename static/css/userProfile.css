@@ -13,7 +13,7 @@ body{
     background-color: #fff;
     grid-column: 1/3;
     display: flex;
-    flex-direction: column;
+    flex-direction: column-reverse;
     justify-content: center;
     align-items: center;
     /* width: fit-content;
@@ -69,18 +69,64 @@ body{
 .members{
     display:flex;
     flex-direction:column;
-    gap:0.5em;
 }
-.member{
-    background-color: #fff;
-    border-radius:1em;
-    display:flex;
-    align-items:space-between;
-    justify-content:space-between;
+[class*="fa"]{
+    opacity: .85;
+    will-change: opacity;
+    transition: opacity .3s;
+}
+[class*="fa"]:hover{
+    cursor: pointer;
+    opacity: 1;
+}
+.editImageForm{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+.editImage__input{
+    display: none;
+    padding:1em;
+    border-radius: 1em;
+}
+.editImage__input-animated{
+    animation: animate-file-input .4s ease-out both;
+}
+.img-btn{
+    display: none;
+    height: min-content;
+    width: min-content;
+}
+.img-btn-animated{
+    animation: animate-file-input .4s ease-out both;
+}
+.fa-camera{
+    transition: opacity .4s;
+    will-change: opacity;
+}
+.fa-camera:hover{
+    cursor: pointer;
+    opacity: 0.8;
+}
+[id*="deleteUser"] {
+    visibility: hidden;
+}
+.nameInput{
+    padding:0.3em;
+    border-radius: 1em;
+    border:none;
+    animation: animate-name-input .4s .2s ease-out both;
+}
+.btn-submit, .btn-cancel-animated{
+    animation: animate-name-input .4s .2s ease-out both;
 }
 
-button:hover{
-    cursor: pointer;
+#friendFormWrapper{
+    padding: 1em;
+    flex-direction: column;
+    width: 20%;
+    justify-content: center;
+    align-items: center;
 }
 @media screen and (max-width: 768px){
     .friendImage{
@@ -88,5 +134,25 @@ button:hover{
     }
     .friends{
         min-width:11em;
+    }
+}
+@keyframes animate-file-input{
+    from{
+        opacity: 0;
+        transform: translateX(-10%);
+    }
+    to{
+        opacity: 1;
+        transform: translate(0);
+    }
+}
+@keyframes animate-name-input{
+    from{
+        opacity: 0;
+        transform: scale(0);
+    }
+    to{
+        opacity: 1;
+        transform: scale(1);
     }
 }

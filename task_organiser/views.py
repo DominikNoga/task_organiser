@@ -101,4 +101,17 @@ def edit_task(request, task_id):
 
 @login_required(login_url='login')
 def user_profile(request):
-    return render(request, 'task_organiser/userProfile.html')
+    user = request.user.appuser
+    form = ChangeProfilePicForm(instance=user)
+    if request.method == "POST":
+        form = ChangeProfilePicForm(request.POST, request.FILES ,instance=user)
+        if form.is_valid():
+            form.save()
+            return redirect('userProfileRedirect')
+
+    context = {"form": form}
+    return render(request, 'task_organiser/userProfile.html', context)
+
+
+def user_profile_redirect(request):
+    return redirect('userProfile')

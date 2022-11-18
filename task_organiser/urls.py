@@ -11,4 +11,5 @@ urlpatterns = [
     path('edit_task/<str:task_id>', views.edit_task, name='edit_task'),
     path('logout', views.logout_page, name='logout'),
     path('userProfile', views.user_profile, name='userProfile'),
+    path('userProfileRedirect', views.user_profile_redirect, name='userProfileRedirect'),
 ]

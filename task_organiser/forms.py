@@ -1,3 +1,4 @@
+from django import forms
 from django.forms import ModelForm, Textarea
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
@@ -18,3 +19,10 @@ class addTaskForm(ModelForm):
         widgets = {
             "description": Textarea(attrs={"rows":1, "cols":20}),
         }
+
+
+class ChangeProfilePicForm(ModelForm):
+    profile_pic = forms.FileField(label='', label_suffix='', help_text='')
+    class Meta:
+        model = AppUser
+        fields =['profile_pic']

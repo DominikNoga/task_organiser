@@ -28,16 +28,33 @@ export default class LayoutManager {
         this.formContainer = document.querySelector("#taskFormContainer");
         this.taskForm = new TaskForm();
     }
-    updateRows = (value) =>{
-        this.dm.updateDates(value)
-        this.rows.forEach((row, i) =>{
-            row.date = this.dm.dateArr[i];
-            row.setTasks(this.tasks)
-            row.clearRow(this.rowDivs[i]);
-            row.fillRow(this.rowDivs[i]);
+    handleRowAnimation = (value) =>{
+        if(value === 0)
+            return;
+        let className = "row-forwards", classNameToRemove = "row-backwards";
+        if(value > 0){    
+            className = "row-backwards" 
+            classNameToRemove = "row-forwards"
+        }
+        this.rowDivs.forEach(rowDiv => {
+            rowDiv.classList.remove(className);
+            rowDiv.classList.add(className);
+            rowDiv.classList.remove(classNameToRemove);
         })
-        this.dm.updateDateSlider();
-        this.updateButtons();
+    }
+    updateRows = (value) =>{
+        this.handleRowAnimation(value);
+        setTimeout(() => {
+            this.dm.updateDates(value)
+            this.rows.forEach((row, i) =>{
+                row.date = this.dm.dateArr[i];
+                row.setTasks(this.tasks)
+                row.clearRow(this.rowDivs[i]);
+                row.fillRow(this.rowDivs[i]);
+            })
+            this.dm.updateDateSlider();
+            this.updateButtons();
+        }, 1000)
     }
     hideFormListener = () =>{
         this.hideFromBtn = document.querySelector(".hideFormBtn");
