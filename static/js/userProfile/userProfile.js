@@ -73,14 +73,14 @@ class LayoutManager{
     editedGroupName = (group) =>{
         return `<input type="text" value="${group.group_name}" class="nameInput"/> 
         <button type="button" class="btn-submit" id="changeNameBtn${group.id}">save</button>
-        <i class="fa-solid fa-door-open"  title="leave this group" class="leaveGroup${group.id}"></i>
+        <i class="fa-solid fa-door-open leaveGroupBtn"  title="leave this group"></i>
         `
     }
     friendTileDiv = (friend) =>{
         return `<div class="friendTile">
         <img src="static/img${friend.profile_pic}" alt="" class="profileImg">
         <div class="memberUsername">${friend.username}</div>
-        <input type="checkbox" name="" id="deleteFriend${friend.user}">
+        <input type="checkbox" name="" class="deleteFriendBox" value="${friend.user}">
     </div>`
     }
     fillGroupsDiv = async () =>{
@@ -119,6 +119,7 @@ class LayoutManager{
         this.currentGroupId = groupId; 
         await this.updateGroupDiv(true);
         const saveBtn = document.querySelector(`#changeNameBtn${groupId}`);
+        this.addLeaveGroupEvent();
         saveBtn.addEventListener("click", async ()  => {
             const btnId = Number(saveBtn.id.slice(btnSaveLength));
             this.currentGroupId = btnId;
@@ -139,26 +140,30 @@ class LayoutManager{
             });
         });
     }
+    addLeaveGroupEvent = () =>{
+        const leaveGroupBtn = document.querySelector(".leaveGroupBtn");
+        leaveGroupBtn.addEventListener("click", async () =>{
+            await this.leaveGroupEventFunction();
+        })
+    }
     changeGroupName = async (groupName, id) => {
         const group = await this.groupApi.readDetail(id);
         group.group_name = groupName;
         await this.groupApi.update(group, id);
     }
-    removeUserFromGroup = async (id) =>{
-        await this.groupApi.removeGroupMember(this.currentGroupId,id);
-        const user = await this.userApi.readDetail(id);
-        displayMessage(`You have successfully removed user ${user.username} from your group`);
-        this.updateGroupDiv(true);
+    leaveGroup = async () =>{
+        await this.groupApi.removeGroupMember(this.currentGroupId,this.currentUserId);
+        displayMessage(`You have successfully left this group`);
+        await this.fillGroupsDiv();
     }
-    removeEventFunction = async (btn) =>{
-        displayAcceptMessage("Are you sure you want to remove this user from the group?");
+    leaveGroupEventFunction = async () =>{
+        displayAcceptMessage("Are you sure you want to leave this group?");
         const subBtn = document.querySelector("#popupSubmit")
         const cancelBtn = document.querySelector("#popupCancel")
-        const id = Number(btn.id.slice(btnCancelLength));
         try {
             const result = await this.waitForPopup(subBtn, cancelBtn);
             if(result === 1)
-                await this.removeUserFromGroup(id);
+                await this.leaveGroup();
         } catch (error) {}
     }
     addRemoveEvent = async () => {
@@ -169,17 +174,41 @@ class LayoutManager{
             });
         });
     }
+    deleteFriends = async () =>{
+        const selectedFriends = document.querySelectorAll(".friendTile input:checked");
+        const friendsIds = Array.from(selectedFriends).map(friend=>
+            Number(friend.value)
+        );
+        displayAcceptMessage("Are you sure you want to remove those friends?");
+        const subBtn = document.querySelector("#popupSubmit")
+        const cancelBtn = document.querySelector("#popupCancel")
+        try {
+            const result = await this.waitForPopup(subBtn, cancelBtn);
+            if(result === 1){
+                await this.userApi.removeFriends(this.currentUserId, friendsIds)
+                this.hideFriendForm();
+                this.friendsDiv.innerHTML = `<h2 class="title">Your friends 
+                <i onclick="showForm()"id="editFriendsBtn" title="edit your friends" class="fa-solid fa-pen-to-square"></i>
+            </h2>`;
+                this.friendFormWrapper.innerHTML = `<button onclick="hideForm()" class="hideFormBtn">X</button>`
+                setTimeout(() => {
+                    this.fillFriendsDiv();
+                }, 800)
+               
+            }
+        } catch (error) {}
+        
+    }
     fillFriendsDiv = async () =>{
         const friends = await this.userApi.getUserFriends(this.currentUserId);
         friends.forEach(friend => {
             this.friendsDiv.innerHTML += this.friendDiv(friend);
-        });
-    }
-    fillFriendsForm = async () =>{
-        const friends = await this.userApi.getUserFriends(this.currentUserId);
-        friends.forEach(friend => {
             this.friendFormWrapper.innerHTML += this.friendTileDiv(friend);
-        
+        });
+        this.friendFormWrapper.innerHTML += `<button class="btn-submit" id="deleteFriendsBtn">Delete Selected Friends</button>`;
+        this.deleteFriendsBtn = document.querySelector("#deleteFriendsBtn");
+        this.deleteFriendsBtn.addEventListener("click",async () =>{
+            await this.deleteFriends();
         })
     }
     displayFriendForm = () =>{
@@ -204,7 +233,6 @@ class LayoutManager{
         })
         await this.fillFriendsDiv();
         await this.fillGroupsDiv();
-        await this.fillFriendsForm();
         this.editFriendsBtn.addEventListener("click", () =>{
             this.displayFriendForm();
             
@@ -219,12 +247,19 @@ class LayoutManager{
         const popup = document.querySelector(".popupMessage");
         return new Promise((resolve, reject) =>{        
             subBtn.addEventListener('click', () =>{
-                body.removeChild(popup);
-                resolve(1);
+                popup.classList.add("popupMessage-hide")
+                setTimeout(() =>{
+                    body.removeChild(popup);
+                    resolve(1);
+                }, 600)
+                
             })
             cancelBtn.addEventListener('click', () =>{
-                body.removeChild(popup);
-                reject();
+                popup.classList.add("popupMessage-hide")
+                setTimeout(() =>{
+                    body.removeChild(popup);
+                    reject();
+                }, 600)
             })
         })
     }

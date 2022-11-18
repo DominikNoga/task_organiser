@@ -111,6 +111,10 @@ body{
 [id*="deleteUser"] {
     visibility: hidden;
 }
+#deleteFriendsBtn{
+    display: block;
+    margin: auto;
+}
 .nameInput{
     padding:0.3em;
     border-radius: 1em;
@@ -122,11 +126,25 @@ body{
 }
 
 #friendFormWrapper{
-    padding: 1em;
+    padding: 1.5em;
     flex-direction: column;
     width: 20%;
     justify-content: center;
     align-items: center;
+    max-height:100vh;
+    overflow-y:scroll;
+}
+#popupSubmit{
+    animation: none;
+}
+.popupMessage{
+    animation: show-up .4s ease-out both;
+}
+.popupMessage-hide{
+    animation: hide-self .4s ease-out both;    
+}
+.group{
+    animation: show-group .6s .2s ease-out both;
 }
 @media screen and (max-width: 768px){
     .friendImage{
@@ -154,5 +172,31 @@ body{
     to{
         opacity: 1;
         transform: scale(1);
+    }
+}
+@keyframes show-up{
+    from{
+        opacity: 0;
+    }
+    to{
+        opacity: 1;
+    }
+}
+@keyframes hide-self{
+    from{
+        opacity: 1;
+    }
+    to{
+        opacity: 0;
+    }
+}
+@keyframes show-group{
+    from{
+        opacity: 0;
+        transform: translateY(50px);
+    }
+    to{
+        opacity: 1;
+        transform: translateY(0);
     }
 }

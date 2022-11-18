@@ -22,5 +22,16 @@ export default class AppUserApi extends Api {
             currentUser.friends.includes(user.user)
         );
     }
+    removeFriends = async (userId, friendsIds) => {
+        const user = await this.readDetail(userId);
+        user.friends.forEach((friend, i) =>{
+            if(friendsIds.includes(friend))
+                user.friends[i] = -1;
+        })
+        user.friends.sort().reverse();
+        for(let i = 0; i < friendsIds.length; i++)
+            user.friends.pop();
+        await this.update(user, user.user)
+    }
 
 }
