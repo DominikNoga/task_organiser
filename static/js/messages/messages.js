@@ -20,7 +20,6 @@ const messageInput= document.getElementsByClassName('messageInput')[0];
 const commonTasks = document.getElementsByClassName('commonTasks')[0];
 let currentFriendId = null;
 let currentGroupId = null;
-
 const getCurrentFriendId = async () => {
     const userMessages = await messageApi.getUserMessages(currentUserId);
     const lastMessage = userMessages[userMessages.length - 1];
@@ -38,6 +37,18 @@ const createUsersArray = async (messages) => {
     let users = await userApi.read();
     users = users.filter(user => idsSet.has(user.user))
     return users;
+}
+const basicConversationDiv = () =>{
+    return `<div class="friendSelect">
+    <h3>Chats</h3>
+    <input type="text" id="friendSelectInput" placeholder="Friend or group name ...">
+</div> 
+<div id="friendsAndGroups">
+
+</div><br>
+<div class="friendTiles">
+                
+</div>`;
 }
 const ConversationTile = (user, messages) =>{
     return `<div class="conversationTile">
@@ -98,8 +109,9 @@ const displayGroupTiles = async () =>{
             new GroupConversation(currentUserId, groupMessages, group.id)
         )
     }
+    const friendTiles = document.querySelector(".friendTiles")
     groupConversations.forEach((conversation, i) => {
-        sideConversations.innerHTML += groupConversationTile(
+        friendTiles.innerHTML += groupConversationTile(
             nonEmpty[i] , conversation.messages
         )
     })
@@ -108,17 +120,18 @@ const displayGroupTiles = async () =>{
 
 }
 const displayConversationTiles = async () =>{
-    sideConversations.innerHTML = '';
+    sideConversations.innerHTML = basicConversationDiv();
     const userMessages = await messageApi.getUserMessages(currentUserId);
-    const userArray = await createUsersArray(userMessages)
+    const userArray = await createUsersArray(userMessages);
     const conversations = [];
     userArray.forEach(user => {
         conversations.push(new Conversation(currentUserId,
             user.user, userMessages));
     });
+    const friendTiles = document.querySelector(".friendTiles")
     conversations.forEach((conversation, i) => {
         conversation.setMessages();
-        sideConversations.innerHTML += ConversationTile(
+        friendTiles.innerHTML += ConversationTile(
             userArray[i] , conversation.messages
         )
     })
@@ -136,6 +149,7 @@ const buildLayout = async () => {
     const groupIds = await displayGroupTiles();
     await addTileEvents(frinedsIds);
     await addGroupTileEvents(groupIds);
+    await chooseFriend();
 }
 const friendTileEvent = async (id) =>{
     currentFriendId = id;
@@ -175,6 +189,72 @@ sendBtn.addEventListener('click', async () => {
 const initLayout = async () => {
     currentFriendId = await getCurrentFriendId();
     await buildLayout();
-}
 
+}
+const friendDiv = (friend) => {
+    return `<div class="friendTile" id="friendTile${friend.user}">
+        <img class="profileImg" src="static/img${friend.profile_pic}" alt=""/> <b>${friend.username}</b>
+    </div>
+    `
+}
+const groupDiv = (group) => {
+    return `<div class="friendTile" id="groupTile${group.id}">
+        <p>Group:</p> <b>${group.group_name}</b>
+    </div>
+    `
+}
+const findFriendsAndGroups =async (username) =>{
+    const groups = await groupApi.getUserGroups(currentUserId);
+    const friends = await userApi.getUserFriends(currentUserId);
+    const matchingFriends = friends.filter(friend => friend.username.includes(username));
+    const matchingGroups = groups.filter(group => group.group_name.includes(username));
+    return [matchingFriends, matchingGroups];
+}
+const fillFriendsAndGroupsDiv = (friends, groups) =>{
+    const friendsAndGroupsDiv = document.querySelector("#friendsAndGroups")
+    friends.forEach(friend => {
+        friendsAndGroupsDiv.innerHTML += friendDiv(friend); 
+    });
+    groups.forEach(group =>{
+        friendsAndGroupsDiv.innerHTML += groupDiv(group);
+    })
+}
+const chooseFriend = async () => {
+    const friendsAndGroupsDiv = document.querySelector("#friendsAndGroups")
+    const friendsIndex = 0, groupsIndex = 1;
+    const friendSelectInput = document.querySelector("#friendSelectInput");
+    friendSelectInput.addEventListener("input", async () => {
+        friendsAndGroupsDiv.innerHTML = '';
+        friendsAndGroupsDiv.style.height = '0px';
+        if(friendSelectInput.value.length >= 1){
+            friendsAndGroupsDiv.style.height = '80vh';
+            const friendsAndGroups =  await findFriendsAndGroups(friendSelectInput.value);
+            const groups = friendsAndGroups[groupsIndex]
+            const friends= friendsAndGroups[friendsIndex];
+            fillFriendsAndGroupsDiv(friends, groups);
+            addFriendTileEvents();
+        }
+        
+    })
+}
+const addFriendTileEvents = () =>{
+    const friendsAndGroupsDiv = document.querySelector("#friendsAndGroups")
+    const tiles = document.querySelectorAll(".friendTile");
+    tiles.forEach(tile => {
+        tile.addEventListener("click",async () =>{
+            let id = Number(tile.id.slice(10));
+            groupMode = false;
+            if(tile.id.includes("group")){
+                id = Number(tile.id.slice(9));
+                groupMode = true;
+                currentGroupId = id;
+            }
+            else
+                currentFriendId = id;
+            friendsAndGroupsDiv.innerHTML = '';
+            friendsAndGroupsDiv.style.height = '0px';
+            await buildLayout();
+        })
+    })
+}
 initLayout();

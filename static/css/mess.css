@@ -13,6 +13,29 @@ body{
     border-right: 1px solid black;
     display: flex;
     flex-direction: column;
+    position: relative;
+    overflow-x:hidden;
+}
+.friendTiles{
+    display: flex;
+    flex-direction: column;
+    max-height:80vh;
+    width:100%
+}
+#friendsAndGroups{
+    position: absolute;
+    width: 100%;
+    background-color: rgb(235, 222, 222);
+    z-index: 2;
+    top:15%;
+}
+.friendTile{
+    will-change: opacity;
+    transition: opacity .3s;
+}
+.friendTile:hover{
+    opacity: 0.8;
+    cursor: pointer;
 }
 .conversationTile, .groupConversationTile{
     border-bottom: 1px dotted black;
@@ -28,6 +51,7 @@ body{
     border-right:1px solid black;
     display: flex;
     flex-direction: column;
+    min-height: 70vh;
     gap:1em;
 }
 .currentMessages{
@@ -58,9 +82,10 @@ body{
     display:flex;
     flex-direction:column;
     align-items:center;
+    gap:0.5em;
 }
 .task{
-    max-width:80%;
+    max-width:50%; 
 }
 
 .messageBig{
@@ -86,10 +111,49 @@ body{
 .btn-reject{
     color:red;
 }
+.high{
+    background:red;
+}
 #footer {
     margin:0;
     height: 2em;
 }
 #currentId{
     display: none;
+}
+#friendSelectInput{
+    border-radius: 1em;
+    padding: 0.5em;
+    width: 80%;
+    border: none;
+    border-bottom: 1px solid rgb(85, 113, 156);
+}
+.messageBig{
+    animation: show-and-slide .6s .2s ease-in both;
+}
+@media screen and (max-width: 500px){
+    body{
+        font-size: 16px;
+    }
+    .container{
+        display: flex;
+        flex-direction: column;
+    }
+    .friendTiles{
+        display: none;
+    }
+    #friendsAndGroups{
+        position: fixed;
+        top:23%;
+    }
+}
+@keyframes show-and-slide{
+    from{
+        transform:translateY(20%);
+        opacity: 0;
+    }
+    to{
+        transform: translateY(0);
+        opacity: 1;
+    }
 }
