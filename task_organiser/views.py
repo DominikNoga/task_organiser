@@ -18,7 +18,7 @@ def home(request):
     current_user = request.user
     tasks = current_user.task_set.filter(deadline__contains=date.today()).order_by("deadline")
     def return_class(x):
-        if x < 3:
+        if x <= 3:
             return "low"
         elif x > 6:
             return "high"

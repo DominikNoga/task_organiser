@@ -12,61 +12,41 @@ a{
     color:inherit;
     text-decoration: none;
 }
-/* navigation */
-nav{
-    background-color: rgb(36,32,33);
+/* nav better */
+.nav{
     width: 100%;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    font-size:1.2em ;
-    height: 2.5em;
+    background-color: rgb(36,32,33); 
+    font-size:1.2em;
     color:white;
     font-weight: bold;
-    padding: 0.4em 0em;
 }
-nav div{
-    height:inherit;
+.nav__list{
+    list-style-type: none;
+    margin:0;
+    display:flex;
+    padding: 0;
 }
-.menu_item, .menu_item_side{
-    display: flex;
-    float:left;
-    margin-left:1em;
-    justify-content: center;
-    align-items: center;
+.nav__link{
+    padding: 1em;
+    transition: .3s opacity, .3s background-color;
+    will-change: opacity, background-color;
+    display: block;
 }
-.menu_item:hover{
+.nav__link:hover{
     opacity: 0.8;
     cursor: pointer;
     background-color: rgb(55, 48, 50);
 }
-.menu_item_side:hover{
-    opacity: 0.8;
-    cursor: pointer;
-}
-.menu_link{
-    display: block;
-}
-
 /* main section */
 
-.mainContainer{
-    display: flex;
-    flex-direction: row;
-    width: 100%;
-    margin: 0;
-    padding: 0;
-    gap: 5%;
+.main--home{
+    margin:auto;
+    width: 80%;
 }
-.sideMenu{
-    color:white;
-    background-color: rgb(36,32,33);
-    padding: 1em 0.5em;
-    display: flex;
-    flex-direction:column;
-    gap: 1em;
-}
-.mainPanel, .mainPanelCal{
+.main__panel, .mainPanelCal{
     display:grid;
     width:100%;
     margin-top:1em;
@@ -92,6 +72,7 @@ nav div{
     justify-content: center;
     flex-direction: column;
     align-items: center;
+    position: relative;
 }
 .newFriends{
     height:min-content;
@@ -99,14 +80,12 @@ nav div{
 small{
     font-size:0.7em;
 }
-
 .addFriendForm{
     display: flex;
     width: 80%;
     justify-content: center;
     flex-direction: column;
-    align-items:center;
-    
+    align-items:center;   
 }
 .users_list{
     background-color: white;
@@ -138,6 +117,8 @@ small{
 legend{
     font-weight:bold;
     margin-bottom: 1em;
+    position: absolute;
+    top:0;
 }
 .createGroupForm{
     margin-top: 3em;
@@ -257,14 +238,18 @@ legend{
     .task{
         font-size:1.2em;
     }
-}
-@media screen and (min-width:768px) and (max-width: 1000px){ 
     .plan{
-        display: flex;
-        flex-direction: column;
-        gap:1em;
+        display: grid;
+    }
+    .plan-title{
+        grid-column: 1/3;
+    }
+    .main--home{
+        display:flex;
+        flex-direction:column;
     }
 }
+
 
 
 /* CALENDAR */
@@ -286,6 +271,9 @@ legend{
     gap:0.5em;
     background-color: rgba(255, 255, 255, 0.601);
     padding:1em;
+}
+.small-box{
+    height: 1em;
 }
 #legend h3{
     grid-column: 1/3;
@@ -320,7 +308,8 @@ legend{
 }
 .rowContainer{
     grid-column: 1/4;
-    border:red 3px solid;
+    border:dotted 5px black;
+    padding: 1em;
     display: grid;
     grid-template-columns: 30% 30% 30%;
     column-gap: 1em;
@@ -448,10 +437,10 @@ button:hover{
     animation: row-forwards .7s 1.2s ease-in-out, row-backwards .7s .3s ease-in-out;
 } */
 .row-forwards{
-    animation: row-backwards .7s .3s ease-in-out;
+    animation: row-forwards .7s .3s ease-in-out;
 }
 .row-backwards{
-    animation: row-forwards .7s .3s ease-in-out;
+    animation: row-backwards .7s .3s ease-in-out;
 }
 /* Animations */
 @keyframes show-task-form{
@@ -499,7 +488,7 @@ button:hover{
         transform: translateX(0);
     }
     50%{
-        transform: translateX(-20%);
+        transform: translateX(20%);
     }
     100%{
         transform: translateX(0);
@@ -510,7 +499,7 @@ button:hover{
         transform: translateX(0);
     }
     50%{
-        transform: translateX(20%);
+        transform: translateX(-20%);
     }
     100%{
         transform: translateX(0);

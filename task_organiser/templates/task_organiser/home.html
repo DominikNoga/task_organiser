@@ -8,16 +8,12 @@
 </style>
 {% endblock %}
 {% block content %}
-
-<div class="mainContainer">
-    <div class="sideMenu">
-        <a href="#plan" class="side-link">Today's plan</a>
-        <a href="#addTask" class="side-link">Add task</a>
-    </div>
-    <div id="idHome">
-        {{user.id}}
-    </div>
-    <div class="mainPanel">
+<div id="idHome">
+    {{user.id}}
+</div>
+<main class="main main--home">
+    
+    <div class="main__panel">
         <div class="plan" id="plan">
             <h3 class="plan-title">
                 Hello {{user.username}}, those are Your tasks for today
@@ -47,16 +43,13 @@
                     </p>
                     <p>
                         Group: {{ task.0.group }}
-                    </p>
-                    
-                    
+                    </p>     
                 </div>    
-                
-            {% endfor %}
-        
+            {% endfor %}        
         </div>
         <fieldset class="createGroupForm">
             <legend>Create new group</legend>
+            <br>
             <input type="text" name="groupName" 
             class="friendGroupInput" placeholder="Add group name ...">
             
@@ -75,6 +68,7 @@
             </button>
         </fieldset>
         <fieldset class="newFriends">
+            <br>
             <legend>Add new friends</legend>
         
             <div class="addFriendForm">
@@ -86,6 +80,6 @@
             </div>
         </fieldset>
     </div>
-</div>
+</main>
 <script type="module" src="{% static 'js/home/home.js' %}"></script>
 {% endblock %}

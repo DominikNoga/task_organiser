@@ -1,23 +1,24 @@
 {% load static %}
-<nav id="navbar">
-    <div>
-        <div class="menu_item" style="margin-left:0.5em;">
-            <a href="{% url 'home' %}" class="menu_link">Home</a>
-        </div>
-        <div class="menu_item">
-            <a href="{% url 'calendar' %}" class="menu_link">Calendar</a>
-        </div>
-        <div class="menu_item">
-            <a href="{% url 'messages' %}" class="menu_link">Messages</a>
-        </div>
-    </div>
-    <div>
-        <div class="menu_item_side">
-            <a href="{% url 'logout' %}" class="menu_link" title="logout"><i class="fa fa-right-from-bracket"></i></a>
-        </div>
-        <div class="menu_item_side" style="margin-right: 1em;">
-            <a href="{% url 'userProfile' %}" class="menu_link"><i class="fa fa-user" aria-hidden="true"></i></a>
-        </div>
-    </div>
+<nav class="nav">
+    <ul class="nav__list">
+        <li class="nav__item">
+            <a href="{% url 'home' %}" class="nav__link" title="Home page"><i class="fa fa-home"></i></a>
+        </li>
+        <li class="nav__item">
+            <a href="{% url 'calendar' %}" class="nav__link" title="Calendar"><i class="fa fa-calendar"></i></a>
+        </li>
+        <li class="nav__item">
+            <a href="{% url 'messages' %}" class="nav__link" title="Messages"><i class="fa fa-message"></i></a>
 
+        </li>
+    </ul>
+
+    <ul class="nav__list nav__list--side">
+        <li class="nav__item nav__item--side">
+            <a href="{% url 'logout' %}" class="nav__link" title="Logout"><i class="fa fa-right-from-bracket"></i></a>
+        </li>
+        <li class="nav__item nav__item--side nav__item--user">
+            <a href="{% url 'userProfile' %}" title="Your profile" class="nav__link"><i class="fa fa-user" aria-hidden="true"></i></a>
+        </li>
+    </ul>
 </nav>

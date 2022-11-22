@@ -22,7 +22,6 @@ export default class LayoutManager {
         this.cancelBtn = document.getElementById("popupCancel")
         this.deleteLink = document.querySelector('.popupMessage a');
         this.datePicker = document.querySelector('#datePicker');
-        this.groupSelect = document.querySelector('#groupSelectCalendar');
         this.gm = new GroupManager();
         this.addTaskBtn = document.querySelector("#addTaskBtn");
         this.formContainer = document.querySelector("#taskFormContainer");
@@ -38,8 +37,10 @@ export default class LayoutManager {
         }
         this.rowDivs.forEach(rowDiv => {
             rowDiv.classList.remove(className);
-            rowDiv.classList.add(className);
             rowDiv.classList.remove(classNameToRemove);
+            setTimeout(() => {
+                rowDiv.classList.add(className);
+            },200)
         })
     }
     updateRows = (value) =>{
@@ -54,7 +55,7 @@ export default class LayoutManager {
             })
             this.dm.updateDateSlider();
             this.updateButtons();
-        }, 1000)
+        }, 1200)
     }
     hideFormListener = () =>{
         this.hideFromBtn = document.querySelector(".hideFormBtn");
@@ -67,7 +68,6 @@ export default class LayoutManager {
     }
     init = () =>{
         this.taskForm.init();
-        this.fillGroupSelect();
         this.addTaskBtn.addEventListener("click", () =>{
             this.formContainer.style.display = "block";
             this.hideFormListener();
@@ -89,19 +89,7 @@ export default class LayoutManager {
             );
             this.updateRows(dateDifferance);
         });
-        this.groupSelect.addEventListener("change", async () => {
-            this.buildLayout(this.groupSelect.value);
-        })
         this.dm.updateDateSlider();
-    }
-    fillGroupSelect = async () => {
-        const currentUserId = Number(localStorage.getItem("currentUserId"));
-        const groups = await this.groupApi.getUserGroups(currentUserId);
-        groups.forEach(group => {
-            this.groupSelect.innerHTML += `<option value="${group.group_name}">
-    ${group.group_name}</option>`
-        });
-        
     }
     buildLayout = async (groupName) => {
         this.init();

@@ -138,6 +138,7 @@ body{
     .container{
         display: flex;
         flex-direction: column;
+        width: 100%;
     }
     .friendTiles{
         display: none;
@@ -145,6 +146,12 @@ body{
     #friendsAndGroups{
         position: fixed;
         top:23%;
+    }
+    .mainConversation{
+        border:none;
+    }
+    #friendSelectInput{
+        width: 98%;
     }
 }
 @keyframes show-and-slide{
