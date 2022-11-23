@@ -1,7 +1,7 @@
 import {displayMessage} from './functions.js'
 const form = document.querySelector(".form")
 const inputs = document.getElementsByTagName("input");
-const placholders = ["enter username", "Pass Your email address", "Enter password",
+const placholders = ["enter username", "Pass your email address", "Enter password",
     "Retype your password"
 ]
 let i = 1;
