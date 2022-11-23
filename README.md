@@ -3,7 +3,7 @@ Application created to help user organizing his daily tasks. It is esspecially u
 
 # demo
 On this repo there is also a short film presenting all features of my application. 
-It is inside the main folder named demoVideo.mkv
+It is inside the main folder named demoVideo.mp4
 # Features
 - Adding tasks to a calendar
 - Adding friends
