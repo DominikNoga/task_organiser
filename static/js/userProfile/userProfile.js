@@ -1,4 +1,4 @@
-import { displayMessage, displayAcceptMessage } from '../functions.js';
+import { displayMessage, displayAcceptMessage, waitForPopup } from '../functions.js';
 import AppUserApi from "../api/appUserApi.js";
 import GroupApi from "../api/groupApi.js";
 
@@ -25,11 +25,14 @@ class LayoutManager{
         this.hideFormBtn = document.querySelector(".hideFormBtn");
     }
     initInfoDiv = async () =>{
-        const user = await this.userApi.readDetail(this.currentUserId)
-        this.userInfo.innerHTML += `<div class="userImgDiv">
-            <img src="static/img${user.profile_pic}" alt="" class="bigUserImage">
-        </div>
-        <h2 id="username">${user.username}</h2>`
+        const user = await this.userApi.readDetail(this.currentUserId);
+        const htmlToAdd = `<div class="userImgDiv">
+        <img src="static/img${user.profile_pic}" alt="" class="bigUserImage">
+    </div>
+    <h2 id="username">${user.username}</h2>
+    <i class="fa-solid fa-camera" title="edit profile image"></i>` 
+        const html = htmlToAdd+ this.userInfo.innerHTML;
+        this.userInfo.innerHTML = html;
     }
     friendDiv = (user) =>{
         return `<div class="friend">
@@ -157,13 +160,12 @@ class LayoutManager{
         await this.fillGroupsDiv();
     }
     leaveGroupEventFunction = async () =>{
-        displayAcceptMessage("Are you sure you want to leave this group?");
+        displayAcceptMessage("Are you sure you want to leave this group?", "Yes", "No");
         const subBtn = document.querySelector("#popupSubmit")
         const cancelBtn = document.querySelector("#popupCancel")
         try {
-            const result = await this.waitForPopup(subBtn, cancelBtn);
-            if(result === 1)
-                await this.leaveGroup();
+            await waitForPopup(subBtn, cancelBtn);
+            await this.leaveGroup();
         } catch (error) {}
     }
     addRemoveEvent = async () => {
@@ -179,23 +181,21 @@ class LayoutManager{
         const friendsIds = Array.from(selectedFriends).map(friend=>
             Number(friend.value)
         );
-        displayAcceptMessage("Are you sure you want to remove those friends?");
+        displayAcceptMessage("Are you sure you want to remove those friends?", "Yes", "No");
         const subBtn = document.querySelector("#popupSubmit")
         const cancelBtn = document.querySelector("#popupCancel")
         try {
-            const result = await this.waitForPopup(subBtn, cancelBtn);
-            if(result === 1){
-                await this.userApi.removeFriends(this.currentUserId, friendsIds)
-                this.hideFriendForm();
-                this.friendsDiv.innerHTML = `<h2 class="title">Your friends 
-                <i onclick="showForm()"id="editFriendsBtn" title="edit your friends" class="fa-solid fa-pen-to-square"></i>
-            </h2>`;
-                this.friendFormWrapper.innerHTML = `<button onclick="hideForm()" class="hideFormBtn">X</button>`
-                setTimeout(() => {
-                    this.fillFriendsDiv();
-                }, 800)
+            await waitForPopup(subBtn, cancelBtn);
+            await this.userApi.removeFriends(this.currentUserId, friendsIds)
+            this.hideFriendForm();
+            this.friendsDiv.innerHTML = `<h2 class="title">Your friends 
+            <i onclick="showForm()"id="editFriendsBtn" title="edit your friends" class="fa-solid fa-pen-to-square"></i>
+        </h2>`;
+            this.friendFormWrapper.innerHTML = `<button onclick="hideForm()" class="hideFormBtn">X</button>`
+            setTimeout(() => {
+                this.fillFriendsDiv();
+            }, 800)
                
-            }
         } catch (error) {}
         
     }
@@ -235,39 +235,31 @@ class LayoutManager{
         await this.fillGroupsDiv();
         this.editFriendsBtn.addEventListener("click", () =>{
             this.displayFriendForm();
-            
         })
         this.hideFormBtn.addEventListener("click", () =>{
             this.hideFriendForm();
         })
         
     }
-    waitForPopup = (subBtn, cancelBtn) =>{
-        const body = document.querySelector("body");
-        const popup = document.querySelector(".popupMessage");
-        return new Promise((resolve, reject) =>{        
-            subBtn.addEventListener('click', () =>{
-                popup.classList.add("popupMessage-hide")
-                setTimeout(() =>{
-                    body.removeChild(popup);
-                    resolve(1);
-                }, 600)
-                
-            })
-            cancelBtn.addEventListener('click', () =>{
-                popup.classList.add("popupMessage-hide")
-                setTimeout(() =>{
-                    body.removeChild(popup);
-                    reject();
-                }, 600)
-            })
-        })
+    hideFileInput = () => {
+        this.fileInput.style.display = 'none';
+        this.imgBtn.style.display = 'none';
+        this.fileInput.classList.remove("editImage__input-animated");
+        this.imgBtn.classList.remove("img-btn-animated");
     }
     dsiplayFileInput = () =>{
         this.fileInput.style.display = 'block';
         this.imgBtn.style.display = 'block';
         this.fileInput.classList.add("editImage__input-animated");
         this.imgBtn.classList.add("img-btn-animated");
+        this.changeImgBtn.addEventListener('click', () => {
+            this.hideFileInput();
+            this.changeImgBtn.title = "edit profile image"
+            this.changeImgBtn.addEventListener('click', () => {
+                this.dsiplayFileInput();
+                this.changeImgBtn.title = "hide form"
+            })
+        })
     } 
 }
 const lm = new LayoutManager();

@@ -59,7 +59,7 @@ a{
     display: grid;
     column-gap: 1em;
     row-gap:1em;
-    grid-template-columns: auto auto auto;
+    grid-template-columns: repeat(3,1fr);
 }
 .newFriends, .createGroupForm{
     min-height: 5em;
@@ -153,7 +153,6 @@ legend{
     text-align: center;
     padding: 1em;
     height:min-content;
-
 }
 .task{
     background-color: rgb(255 255 255 / 60%);
@@ -238,16 +237,19 @@ legend{
     .task{
         font-size:1.2em;
     }
-    .plan{
-        display: grid;
-    }
     .plan-title{
         grid-column: 1/3;
     }
-    .main--home{
+    .main__panel{
         display:flex;
         flex-direction:column;
+        justify-content:center;
+        align-items:center;
     }
+    .createGroupForm, .newFriends{
+        width: 60%;
+    }
+
 }
 
 
@@ -433,14 +435,17 @@ button:hover{
 .tile-down{
     animation: move-friend-tile-down .7s ease-out;
 }
-/* .row{
-    animation: row-forwards .7s 1.2s ease-in-out, row-backwards .7s .3s ease-in-out;
-} */
 .row-forwards{
     animation: row-forwards .7s .3s ease-in-out;
 }
 .row-backwards{
     animation: row-backwards .7s .3s ease-in-out;
+}
+.popupMessage{
+    animation: show-up .4s ease-out both;
+}
+.popupMessage-hide{
+    animation: hide-self .4s ease-out both;    
 }
 /* Animations */
 @keyframes show-task-form{
@@ -503,5 +508,21 @@ button:hover{
     }
     100%{
         transform: translateX(0);
+    }
+}
+@keyframes show-up{
+    from{
+        opacity: 0;
+    }
+    to{
+        opacity: 1;
+    }
+}
+@keyframes hide-self{
+    from{
+        opacity: 1;
+    }
+    to{
+        opacity: 0;
     }
 }

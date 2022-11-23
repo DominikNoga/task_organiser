@@ -1,8 +1,9 @@
 import DateManager from '../calendar/dateManager.js';
 
 const dm = new DateManager();
-export const displayTasks = (userId, friendId, allTasks, div) => {
-    const tasks = getTasks(userId, friendId, allTasks)
+export const displayTasks = (userId, friendId, allTasks, div, groupMode = false, groupId = 0) => {
+    let tasks;
+    groupMode ? tasks = getGroupTasks(allTasks, groupId) : tasks = getTasks(userId, friendId, allTasks);
     tasks.forEach(task => {
         let cssClass = Number(task.importancy) > 3 ? (Number(task.importancy) > 6 ? "high" : "medium" ) : "low"
         div.innerHTML += taskDiv(task, cssClass)
@@ -13,11 +14,11 @@ const getTasks = (userId, friendId, allTasks) => {
     let idsReversed = `${friendId} ${userId}`
     return allTasks.filter(task => {
         let users = task.users.join(" ");
-        if(users.includes(ids) || users.includes(idsReversed))
-            return true;
-        
-        return false;
+        return (users.includes(ids) || users.includes(idsReversed))
     })
+}
+const getGroupTasks = (allTasks, groupId) =>{
+    return allTasks.filter(task => task.group === groupId)
 }
 const taskDiv = (task, cssClass) => {
     return `<div class="task ${cssClass}">

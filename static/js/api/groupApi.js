@@ -36,7 +36,7 @@ export default class GroupApi extends Api {
         if(currentGroup !== undefined)
             return currentGroup.group_name;
         
-        return "Just You";
+        return "Just you";
     }
     getGroupMembers = async (groupId) => {
         const group = await this.readDetail(groupId);

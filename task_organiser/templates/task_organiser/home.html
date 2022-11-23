@@ -16,7 +16,7 @@
     <div class="main__panel">
         <div class="plan" id="plan">
             <h3 class="plan-title">
-                Hello {{user.username}}, those are Your tasks for today
+                Hello {{user.username}}, those are your tasks for today
             </h3>
             {% for task in tasks %}
                 <div class="task {{task.1}}">
@@ -51,12 +51,12 @@
             <legend>Create new group</legend>
             <br>
             <input type="text" name="groupName" 
-            class="friendGroupInput" placeholder="Add group name ...">
+            class="friendGroupInput" placeholder="Add group name ..." autocomplete="off">
             
             <div class="friendTiles">
 
             </div>
-            <h4>Your current group</h4>
+            <h4>your current group</h4>
             <p class="groupName">
                 Group name:
             </p>
@@ -72,7 +72,7 @@
             <legend>Add new friends</legend>
         
             <div class="addFriendForm">
-                <input type="text" placeholder="Type in username" name="friendUsername" class="friendGroupInput">
+                <input type="text" placeholder="Username ..." autocomplete="off" name="friendUsername" class="friendGroupInput">
                 <div class="users_list">
 
                 </div>

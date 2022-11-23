@@ -9,14 +9,14 @@ export const displayMessage = (text) => {
         body.removeChild(div);
     }, 4000);
 }
-export const displayAcceptMessage = (text) => {
+export const displayAcceptMessage = (text, btnAcceptText, btnCancelText) => {
   const body = document.querySelector("body");
   const div  = document.createElement("div");
   let timeLeft = 10;
   div.classList.add("popupMessage");
   div.innerHTML = `<h4>${text}</h4>`;
-  div.innerHTML += `<button class="btn-submit" id="popupSubmit">Delete</button> &emsp; 
-<button class="btn-cancel" id="popupCancel">Cancel</button>
+  div.innerHTML += `<button class="btn-submit" id="popupSubmit">${btnAcceptText}</button> &emsp; 
+<button class="btn-cancel" id="popupCancel">${btnCancelText}</button>
 <div class="timer">${timeLeft}</div>`;
   div.style.display = "block";
   body.appendChild(div);
@@ -50,4 +50,25 @@ export const getSelectValues = (select) => {
       }
     }
     return result;
+}
+export const waitForPopup = (subBtn, cancelBtn) =>{
+  const body = document.querySelector("body");
+  const popup = document.querySelector(".popupMessage");
+  return new Promise((resolve, reject) =>{        
+      subBtn.addEventListener('click', () =>{
+          popup.classList.add("popupMessage-hide")
+          setTimeout(() =>{
+              body.removeChild(popup);
+              resolve();
+          }, 600)
+          
+      })
+      cancelBtn.addEventListener('click', () =>{
+          popup.classList.add("popupMessage-hide")
+          setTimeout(() =>{
+              body.removeChild(popup);
+              reject();
+          }, 600)
+      })
+  })
 }

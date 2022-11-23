@@ -22,6 +22,8 @@ let currentFriendId = null;
 let currentGroupId = null;
 const getCurrentFriendId = async () => {
     const userMessages = await messageApi.getUserMessages(currentUserId);
+    if (userMessages.length < 1)
+        return;
     const lastMessage = userMessages[userMessages.length - 1];
     return (lastMessage.reciever === currentUserId ? 
         lastMessage.sender : lastMessage.reciever)
@@ -90,7 +92,7 @@ const buildTasksDiv = async () =>{
     commonTasks.innerHTML = '<h4></h4>';
     const tasksApi = await taskApi.read();
     displayTasks(currentUserId, currentFriendId, tasksApi,
-        commonTasks);
+        commonTasks, groupMode, currentGroupId);
 }
 const displayGroupTiles = async () =>{
     const userGroups = await groupApi.getUserGroups(currentUserId)
@@ -153,9 +155,9 @@ const buildLayout = async () => {
 }
 const friendTileEvent = async (id) =>{
     currentFriendId = id;
-    await buildTasksDiv();
-    await displayMessages();
     groupMode = false;
+    await buildTasksDiv();
+    await displayMessages();   
 }
 const addTileEvents = async (ids) => {
     const tiles = document.querySelectorAll('.conversationTile');
@@ -166,9 +168,10 @@ const addTileEvents = async (ids) => {
     }
 }
 const groupTileEvent = async (id) => {
+    groupMode = true;
     currentGroupId = id;
     await displayGroupMessages();
-    groupMode = true;
+    await buildTasksDiv();
 }
 const addGroupTileEvents = async (ids) =>{
     const tiles = document.querySelectorAll('.groupConversationTile');

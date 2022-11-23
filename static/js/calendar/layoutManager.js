@@ -5,6 +5,7 @@ import GroupApi from '../api/groupApi.js';
 import TaskApi from '../api/taskApi.js';
 import GroupManager from '../home/groups.js';
 import TaskForm from './taskForm.js';
+import { displayAcceptMessage, waitForPopup } from '../functions.js';
 export default class LayoutManager {
     constructor(){
         this.NEXT = 1;
@@ -17,10 +18,6 @@ export default class LayoutManager {
         this.taskApi = new TaskApi();
         this.rowDivs = document.querySelectorAll('.row')
         this.buttons = document.getElementsByClassName('slider-btn');
-        this.popup = document.getElementsByClassName('popupMessage')[0];
-        this.subBtn = document.getElementById("popupSubmit")
-        this.cancelBtn = document.getElementById("popupCancel")
-        this.deleteLink = document.querySelector('.popupMessage a');
         this.datePicker = document.querySelector('#datePicker');
         this.gm = new GroupManager();
         this.addTaskBtn = document.querySelector("#addTaskBtn");
@@ -66,14 +63,19 @@ export default class LayoutManager {
             },800)
         });
     }
+    displayTaskForm = () => {        
+        this.formContainer.style.display = "block";
+        this.hideFormListener();
+        this.handleFormAnimation("form-active", "form-hidden");
+        this.taskForm.form.reset();
+        const rangeInput = document.querySelector("input[type='range']");
+        rangeInput.value = 1;
+        this.taskForm.rangeValue.innerText = 1;
+    }
     init = () =>{
         this.taskForm.init();
         this.addTaskBtn.addEventListener("click", () =>{
-            this.formContainer.style.display = "block";
-            this.hideFormListener();
-            this.handleFormAnimation("form-active", "form-hidden");
-            this.taskForm.form.reset();
-            this.taskForm.rangeValue.value = 1;
+            this.displayTaskForm() 
         })
         this.buttons[this.PREV].addEventListener("click", () =>{
             this.updateRows(-1)
@@ -111,10 +113,12 @@ export default class LayoutManager {
     addDeleteListener = (taskBtns) =>{
         for(let btn of taskBtns){
             btn.addEventListener('click', async () => {
+                displayAcceptMessage("Are you sure you want to delete this task?", "Yes", "No");
+                const subBtn = document.querySelector("#popupSubmit");
+                const cancelBtn = document.querySelector("#popupCancel");
                 let id = Number(btn.id.slice(8));
-                this.popup.style.display = 'block';
                 try{
-                    await this.waitForPopup();
+                    await waitForPopup(subBtn, cancelBtn);
                     await this.deleteTask(id);
                 }catch(e){
                 }
@@ -133,18 +137,6 @@ export default class LayoutManager {
                 this.taskForm.fillInputFields(id);
             });
         }
-    }
-    waitForPopup = () =>{
-        return new Promise((resolve, reject) =>{        
-            this.subBtn.addEventListener('click', () =>{
-                this.popup.style.display = 'none';
-                resolve();
-            })
-            this.cancelBtn.addEventListener('click', () =>{
-                this.popup.style.display = 'none';
-                reject();
-            })
-        })
     }
     deleteTask = async (id) =>{
         const task = this.tasks.find(t => t.db_id === id);

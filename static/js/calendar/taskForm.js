@@ -17,7 +17,7 @@ export default class TaskForm{
         this.userSelectDiv = document.getElementById("userSelectTextDiv");
         this.form = document.getElementById("addTask");
         this.rangeValue = document.querySelector(".rangeValue");
-        this.noGroupValue = "Just You";
+        this.noGroupValue = "Just you";
         this.currentGroupName = this.noGroupValue;
         this._currentTaskId = -1;
         this.wrapper = document.querySelector("#taskFormWrapper");
@@ -40,7 +40,7 @@ export default class TaskForm{
             group.group_name === this.currentGroupName    
         );
         if(currentGroup === undefined){
-            this.userSelectDiv.innerText = "You";
+            this.userSelectDiv.innerText = "you";
             this.userSelect.style.display = "none";
             return;
         }
@@ -93,18 +93,17 @@ export default class TaskForm{
         let group = null;
         const groups = await this.groupApi.read();
         const currentGroup = groups.find(g => g.group_name === this.currentGroupName);
+        let chosenUsers = [Number(localStorage.getItem("currentUserId"))];
+
         if (currentGroup !== undefined) {
             group = currentGroup.id;
+            const users = await this.userApi.read();
+            const selectValue = getSelectValues(userSelect);
+            chosenUsers = users
+                .filter(user => selectValue.includes(user.user.toString()))
+                .map(user => user.user);
         }
-        const users = await this.userApi.read();
-        const selectValue = getSelectValues(userSelect);
-        let chosenUsers = users
-        .filter(user => selectValue.includes(user.user.toString()))
-        .map(user => user.user);
-        
-        if(this.currentGroupName === this.noGroupValue)
-            chosenUsers = [Number(localStorage.getItem("currentUserId"))];
-        
+                
         const task = this.getTask(group, chosenUsers);
         
         if(this.currentTaskId !== -1)
@@ -112,7 +111,6 @@ export default class TaskForm{
         else
             await this.taskApi.create(task);
         
-        displayMessage("You have successfully created a new task");
         this.form.reset();
         window.location.reload();
     }
@@ -127,9 +125,9 @@ export default class TaskForm{
             this.currentGroupName = this.groupSelect.value;
             await this.fillUserSelect();
         })
-        this.form.addEventListener("submit", (f) =>{
+        this.form.addEventListener("submit",async (f) =>{
             f.preventDefault();
-            this.createTask()
+            await this.createTask()
             this._currentTaskId = -1;
         })
         this.fillGroupSelect();

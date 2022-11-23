@@ -19,7 +19,7 @@ export default class Conversation{
         return this._messages;
     }
     friendRequestToYou = async (id) => {
-        const appUser = await this.api.readDetail(id);
+        const appUser = await this.api.readDetail(this._userId);
         let popupMessage = "You have successfully added a new friend";
         if(appUser.friends.includes(id)){
             popupMessage = "You have already added this friend";
@@ -27,7 +27,7 @@ export default class Conversation{
             return;
         }
         appUser.friends.push(id);
-        this.api.update({friends: appUser.friends},id);
+        this.api.update({friends: appUser.friends},this._userId);
         displayMessage(popupMessage);
         
     }

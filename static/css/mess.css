@@ -75,7 +75,7 @@ body{
     display: grid;
     grid-template-columns: 85% 15%;
     position: sticky;
-    top:97%;
+    top:95%;
 }
 .commonTasks{
     text-align: center;
@@ -85,11 +85,11 @@ body{
     gap:0.5em;
 }
 .task{
-    max-width:50%; 
+    width: 50%;
 }
 
 .messageBig{
-    width:fit-content;
+    max-width:50%;
     border-radius:1em;
     background-color: rgb(235, 222, 222);
     padding:0.5em;
@@ -112,7 +112,13 @@ body{
     color:red;
 }
 .high{
-    background:red;
+    background-color:red;
+}
+.low{
+    background-color: #0df102;
+}
+.medium{
+    background-color:yellow;
 }
 #footer {
     margin:0;
@@ -131,7 +137,7 @@ body{
 .messageBig{
     animation: show-and-slide .6s .2s ease-in both;
 }
-@media screen and (max-width: 500px){
+@media screen and (max-width: 700px){
     body{
         font-size: 16px;
     }
@@ -152,6 +158,11 @@ body{
     }
     #friendSelectInput{
         width: 98%;
+    }
+}
+@media screen and (700px < width < 1000px){
+    .task{
+        width:70%;
     }
 }
 @keyframes show-and-slide{

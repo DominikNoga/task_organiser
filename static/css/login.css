@@ -53,7 +53,49 @@ a{
     display: block;
     margin:auto;
 }
+.loginLink:hover{
+    text-decoration: underline;
+}
 button:hover{
     cursor: pointer;
     opacity: 0.9;
+}
+.errorMessages{
+    color:red;
+    transform:translate(3.5em,-2em);
+    text-shadow: 0 0 5px rgb(245, 243, 243);
+}
+.errorMessages-ok{
+    animation: changeColor .4s ease-out both;
+}
+.errorMessages-wrong{
+    animation: changeColorBack .4s ease-out both;
+}
+.popupMessage{
+    background-color: rgb(36,32,33);
+    padding:1em;
+    text-align:center;
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 100;
+    color:white;
+    width: 20%;
+}
+@keyframes changeColor {
+    from{
+        color:red;
+    }
+    to{
+        color:green;
+    }
+}
+@keyframes changeColorBack {
+    from{
+        color:green;
+    }
+    to{
+        color:red;
+    }
 }
